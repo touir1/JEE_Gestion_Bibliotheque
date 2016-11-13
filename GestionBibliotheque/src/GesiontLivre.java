@@ -19,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import com.toedter.calendar.JDateChooser;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -45,8 +46,6 @@ public class GesiontLivre {
 	private DefaultTableModel table_model;
 	private JScrollPane scrollPane;
 	
-	private Properties properties;
-	private Context context;
 	private IBiblioRemote stub;
 	
 	private List<Livre> livres;
@@ -83,21 +82,11 @@ public class GesiontLivre {
 	 */
 	public GesiontLivre() {
 		//connection
-		try{
-			properties = new Properties();
-			properties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
-			context = new InitialContext(properties);
-			
-			stub = (IBiblioRemote) context.lookup("ejb:/dsBiblioEJB/dsBiblioEJB!metier.sessions.IBiblioRemote");
-			
-			initialize();
-			PreExecution();
-		}
-		catch(Exception e){
-			System.out.println("ERROR:");
-			System.out.println(e.getMessage());
-		}
+		ClientEJB.initialisation();
+		stub = ClientEJB.getStub();
 		
+		initialize();
+		PreExecution();
 		
 	}
 	

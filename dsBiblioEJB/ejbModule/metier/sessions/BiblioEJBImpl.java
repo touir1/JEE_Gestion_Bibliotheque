@@ -96,7 +96,7 @@ public class BiblioEJBImpl implements IBiblioRemote,IBiblioLocal{
 		return q.getResultList();
 	}
 	
-	public List<TypeLivre> consulterTypeLivres(String nom){
+	public List<TypeLivre> consulterTypeLivresByNom(String nom){
 		Query q=E.createQuery("select T from type_livre T where T.nom LIKE '%"+nom+"%'");
 		return q.getResultList();
 	}
@@ -147,8 +147,8 @@ public class BiblioEJBImpl implements IBiblioRemote,IBiblioLocal{
 	}
 
 	@Override
-	public List<Livre> consulterLivres(Auteur auteur) {
-		List<Auteur> a = consulterAuteurs(auteur.getNom());
+	public List<Livre> consulterLivresByAuteur(Auteur auteur) {
+		List<Auteur> a = consulterAuteursByNom(auteur.getNom());
 		List<Livre> retour = new ArrayList<Livre>();
 		for(int i=0;i<a.size();i++){
 			retour.addAll(a.get(i).getLivres());
@@ -157,8 +157,8 @@ public class BiblioEJBImpl implements IBiblioRemote,IBiblioLocal{
 	}
 
 	@Override
-	public List<Livre> consulterLivres(TypeLivre type) {
-		List<TypeLivre> tl = consulterTypeLivres(type.getNom());
+	public List<Livre> consulterLivresByType(TypeLivre type) {
+		List<TypeLivre> tl = consulterTypeLivresByNom(type.getNom());
 		List<Livre> retour = new ArrayList<Livre>();
 		for(int i=0;i<tl.size();i++){
 			retour.addAll(tl.get(i).getLivres());
@@ -173,7 +173,7 @@ public class BiblioEJBImpl implements IBiblioRemote,IBiblioLocal{
 	}
 
 	@Override
-	public List<Auteur> consulterAuteurs(String nom) {
+	public List<Auteur> consulterAuteursByNom(String nom) {
 		Query q=E.createQuery("select A from AUTEUR A where A.nom LIKE '%"+nom+"%'");
 		return q.getResultList();
 	}

@@ -16,16 +16,16 @@ import metier.entities.TypeLivre;
 public interface IBiblioLocal {
 	public List<Livre> consulterLivres();
 	public Livre consulterLivre(Long id);
-	public List<Livre> consulterLivres(Auteur auteur);
-	public List<Livre> consulterLivres(TypeLivre type);
+	public List<Livre> consulterLivresByAuteur(Auteur auteur);
+	public List<Livre> consulterLivresByType(TypeLivre type);
 	public List<Livre> consulterLivresEnPromotion();
 	
 	public List<TypeLivre> consulterTypeLivres();
-	public List<TypeLivre> consulterTypeLivres(String nom);
+	public List<TypeLivre> consulterTypeLivresByNom(String nom);
 	public TypeLivre consulterTypeLivre(Long id);
 	
 	public List<Auteur> consulterAuteurs();
-	public List<Auteur> consulterAuteurs(String nom);
+	public List<Auteur> consulterAuteursByNom(String nom);
 	public Auteur consulterAuteur(Long id);
 	
 	public Commande enregistrerCommande(Panier p, Client c);
