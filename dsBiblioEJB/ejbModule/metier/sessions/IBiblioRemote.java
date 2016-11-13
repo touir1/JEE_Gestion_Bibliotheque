@@ -35,6 +35,7 @@ public interface IBiblioRemote {
 	
 	public void addTypeLivre(TypeLivre type);
 	public List<TypeLivre> consulterTypeLivres();
+	public List<TypeLivre> consulterTypeLivres(String nom);
 	public TypeLivre consulterTypeLivre(Long id);
 	public void updateTypeLivre(TypeLivre type);
 	public void supprimerTypeLivre(Long id);

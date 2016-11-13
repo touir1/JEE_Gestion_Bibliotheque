@@ -1,5 +1,6 @@
 package metier.sessions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -94,6 +95,11 @@ public class BiblioEJBImpl implements IBiblioRemote,IBiblioLocal{
 		Query q=E.createQuery("select T from type_livre T");
 		return q.getResultList();
 	}
+	
+	public List<TypeLivre> consulterTypeLivres(String nom){
+		Query q=E.createQuery("select T from type_livre T where T.nom LIKE '%"+nom+"%'");
+		return q.getResultList();
+	}
 
 	@Override
 	public TypeLivre consulterTypeLivre(Long id) {
@@ -142,14 +148,22 @@ public class BiblioEJBImpl implements IBiblioRemote,IBiblioLocal{
 
 	@Override
 	public List<Livre> consulterLivres(Auteur auteur) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Auteur> a = consulterAuteurs(auteur.getNom());
+		List<Livre> retour = new ArrayList<Livre>();
+		for(int i=0;i<a.size();i++){
+			retour.addAll(a.get(i).getLivres());
+		}
+		return retour;
 	}
 
 	@Override
 	public List<Livre> consulterLivres(TypeLivre type) {
-		// TODO Auto-generated method stub
-		return null;
+		List<TypeLivre> tl = consulterTypeLivres(type.getNom());
+		List<Livre> retour = new ArrayList<Livre>();
+		for(int i=0;i<tl.size();i++){
+			retour.addAll(tl.get(i).getLivres());
+		}
+		return retour;
 	}
 
 	@Override

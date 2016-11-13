@@ -21,6 +21,7 @@ public interface IBiblioLocal {
 	public List<Livre> consulterLivresEnPromotion();
 	
 	public List<TypeLivre> consulterTypeLivres();
+	public List<TypeLivre> consulterTypeLivres(String nom);
 	public TypeLivre consulterTypeLivre(Long id);
 	
 	public List<Auteur> consulterAuteurs();
