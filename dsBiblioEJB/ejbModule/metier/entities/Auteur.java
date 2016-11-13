@@ -3,6 +3,9 @@ package metier.entities;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 
 @Entity
@@ -27,7 +30,8 @@ public class Auteur implements Serializable{
 		this.prenom = prenom;
 	}
 
-	@OneToMany(mappedBy="auteur", fetch = FetchType.LAZY)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy="auteur")
 	private Set<Livre> livres;
 
 	public Set<Livre> getLivres() {

@@ -14,11 +14,11 @@ public class LigneLivrePromotion implements Serializable{
 	
 	private double prix_pro;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@MapsId("ID_promotion")
 	private Promotion promotion;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@MapsId("ID_livre")
 	private Livre livre;
 

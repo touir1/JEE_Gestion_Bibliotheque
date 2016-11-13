@@ -16,10 +16,10 @@ public class Vote implements Serializable{
 	private Long score;
 	private String comment;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	private Client client;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	private Livre livre;
 	
 	public Client getClient() {

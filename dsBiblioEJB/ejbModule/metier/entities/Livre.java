@@ -6,6 +6,9 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 @Entity
 @Table (name="LIVRE")
 
@@ -27,19 +30,23 @@ public class Livre implements Serializable {
 	
 	private double prix;
 	
-	@OneToMany(mappedBy= "livre", fetch = FetchType.LAZY)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy= "livre")
 	private Set<LigneCommande> ligneCommandes;
 	
-	@OneToMany(mappedBy = "livre", fetch = FetchType.LAZY)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy = "livre")
 	private Set<LigneLivrePromotion> ligneLivrePromotions;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	private Auteur auteur;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany
 	private Set<TypeLivre> types;
 	
-	@OneToMany(mappedBy="livre", fetch = FetchType.LAZY)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy="livre")
 	private Set<Vote> votes;
 
 	public Set<Vote> getVotes() {

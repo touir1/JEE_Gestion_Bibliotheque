@@ -25,7 +25,7 @@ public class ServiceRest {
 	}
 	
 	@GET
-	@Path(value="/livresParID/{Id}")
+	@Path(value="/livreParID/{Id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Livre consulterLivres(@PathParam(value="Id")Long ID_livre){
 		return metier.consulterLivre(ID_livre);

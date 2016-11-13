@@ -6,6 +6,9 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 @Entity
 @Table(name="COMMANDE")
 public class Commande implements Serializable{
@@ -23,10 +26,11 @@ public class Commande implements Serializable{
 	
 	private String modePayement;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	Client client;
 	
-	@OneToMany(mappedBy= "commande", fetch = FetchType.LAZY)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy= "commande")
 	private Set<LigneCommande> ligneCommandes;
 	
 

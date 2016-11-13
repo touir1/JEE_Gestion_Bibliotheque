@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.Set;
 import javax.persistence.*;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 @Entity
 @Table(name="PROMOTION")
 public class Promotion implements Serializable{
@@ -26,7 +29,8 @@ public class Promotion implements Serializable{
 	@Column(name="DATE_fin")
 	private Date datefin;
 	
-	@OneToMany(mappedBy = "promotion", fetch = FetchType.LAZY)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy = "promotion")
 	private Set<LigneLivrePromotion> ligneLivrePromotions;
 
 	public Set<LigneLivrePromotion> getLigneLivrePromotions() {

@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.*;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 @Entity
 @Table(name="CLIENT")
 public class Client implements Serializable{
@@ -21,13 +24,15 @@ public class Client implements Serializable{
 	private String email;
 	private String tel;
 	
-	@OneToMany(mappedBy="client", fetch = FetchType.LAZY)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy="client")
 	private Set<Vote> votes;
 	
-	@OneToOne(mappedBy = "client", fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "client")
 	private Compte compte;
 	
-	@OneToMany(mappedBy ="client", fetch = FetchType.LAZY)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy ="client")
 	private Set<Commande> commandes;
 	
 	public Client(String nom, String prenom, String adresse, String email, String tel, Compte compte,

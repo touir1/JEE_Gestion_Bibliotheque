@@ -15,7 +15,7 @@ public class Compte implements Serializable{
 	
 	private String password;
 	
-	@OneToOne(fetch=FetchType.LAZY)
+	@OneToOne
 	private Client client;
 	
 	public String getLogin() {

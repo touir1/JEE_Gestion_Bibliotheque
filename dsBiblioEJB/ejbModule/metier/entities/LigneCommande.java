@@ -14,11 +14,11 @@ public class LigneCommande implements Serializable{
 	private int quantite;
 	private double prix;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@MapsId("num_commande")
 	private Commande commande;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@MapsId("ID_livre")
 	private Livre livre;
 	

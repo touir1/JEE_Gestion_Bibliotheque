@@ -5,6 +5,9 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 @Entity
 @Table(name="type_livre")
 public class TypeLivre implements Serializable{
@@ -17,7 +20,8 @@ public class TypeLivre implements Serializable{
 	
 	private String nom;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany
 	private Set<Livre> livres;
 	
 	public Set<Livre> getLivres() {
