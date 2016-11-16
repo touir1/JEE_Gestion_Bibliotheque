@@ -6,8 +6,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table (name="LIVRE")
@@ -30,24 +29,35 @@ public class Livre implements Serializable {
 	
 	private double prix;
 	
-	@LazyCollection(LazyCollectionOption.FALSE)
+	@JsonIgnore
 	@OneToMany(mappedBy= "livre")
 	private Set<LigneCommande> ligneCommandes;
 	
-	@LazyCollection(LazyCollectionOption.FALSE)
+	@JsonIgnore
 	@OneToMany(mappedBy = "livre")
 	private Set<LigneLivrePromotion> ligneLivrePromotions;
 	
 	@ManyToOne
 	private Auteur auteur;
 	
-	@LazyCollection(LazyCollectionOption.FALSE)
+	@JsonIgnore
 	@ManyToMany
 	private Set<TypeLivre> types;
 	
-	@LazyCollection(LazyCollectionOption.FALSE)
+	@JsonIgnore
 	@OneToMany(mappedBy="livre")
 	private Set<Vote> votes;
+	
+	@ManyToOne
+	private Editeur editeur;
+
+	public Editeur getEditeur() {
+		return editeur;
+	}
+
+	public void setEditeur(Editeur editeur) {
+		this.editeur = editeur;
+	}
 
 	public Set<Vote> getVotes() {
 		return votes;
@@ -96,14 +106,6 @@ public class Livre implements Serializable {
 		super();
 		this.nomLivre = nomLivre;
 		this.dateApparition = dateApparition;
-		this.prix = prix;
-	}
-
-	public Livre(String nomLivre, Date dateApparition, Set<LigneCommande> ligneCommandes, double prix) {
-		super();
-		this.nomLivre = nomLivre;
-		this.dateApparition = dateApparition;
-		this.ligneCommandes = ligneCommandes;
 		this.prix = prix;
 	}
 

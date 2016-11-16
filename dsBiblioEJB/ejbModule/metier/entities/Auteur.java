@@ -3,8 +3,7 @@ package metier.entities;
 import java.io.Serializable;
 import java.util.Set;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -22,6 +21,10 @@ public class Auteur implements Serializable{
 	private String nom;
 	private String prenom;
 	
+	@JsonIgnore
+	@OneToMany(mappedBy="auteur")
+	private Set<Livre> livres;
+	
 	public String getPrenom() {
 		return prenom;
 	}
@@ -29,10 +32,6 @@ public class Auteur implements Serializable{
 	public void setPrenom(String prenom) {
 		this.prenom = prenom;
 	}
-
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy="auteur")
-	private Set<Livre> livres;
 
 	public Set<Livre> getLivres() {
 		return livres;

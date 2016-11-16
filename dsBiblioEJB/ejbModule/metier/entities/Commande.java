@@ -6,8 +6,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="COMMANDE")
@@ -24,12 +23,13 @@ public class Commande implements Serializable{
 	@Column(name="DATE_commande")
 	private Date dateCommande;
 	
-	private String modePayement;
+	@ManyToOne
+	private ModePaiement modePaiement;
 	
 	@ManyToOne
 	Client client;
 	
-	@LazyCollection(LazyCollectionOption.FALSE)
+	@JsonIgnore
 	@OneToMany(mappedBy= "commande")
 	private Set<LigneCommande> ligneCommandes;
 	
@@ -66,22 +66,21 @@ public class Commande implements Serializable{
 		this.dateCommande = dateCommande;
 	}
 
-	public String getModePayement() {
-		return modePayement;
+	public ModePaiement getModePaiement() {
+		return modePaiement;
 	}
 
-	public void setModePayement(String modePayement) {
-		this.modePayement = modePayement;
+	public void setModePaiement(ModePaiement modePaiement) {
+		this.modePaiement = modePaiement;
 	}
 
 	public Commande() {
 		super();
 	}
 
-	public Commande(Date dateCommande, String modePayement) {
+	public Commande(Date dateCommande) {
 		super();
 		this.dateCommande = dateCommande;
-		this.modePayement = modePayement;
 	}
 	
 	

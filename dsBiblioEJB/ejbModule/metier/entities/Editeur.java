@@ -3,26 +3,27 @@ package metier.entities;
 import java.io.Serializable;
 import java.util.Set;
 
-import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.persistence.*;
+
 @Entity
-@Table(name="type_livre")
-public class TypeLivre implements Serializable{
-	
-	private static final long serialVersionUID = -425066239559946826L;
+@Table(name="EDITEUR")
+public class Editeur implements Serializable{
+
+	private static final long serialVersionUID = -6056284737705602678L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+	@Column(name="ID_editeur")
+	private Long ID_editeur;
 	
 	private String nom;
-
-	@JsonIgnore
-	@ManyToMany
-	private Set<Livre> livres;
 	
+	@JsonIgnore
+	@OneToMany(mappedBy="editeur")
+	private Set<Livre> livres;
+
 	public Set<Livre> getLivres() {
 		return livres;
 	}
@@ -31,12 +32,12 @@ public class TypeLivre implements Serializable{
 		this.livres = livres;
 	}
 
-	public Long getId() {
-		return id;
+	public Long getID_editeur() {
+		return ID_editeur;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setID_editeur(Long iD_editeur) {
+		ID_editeur = iD_editeur;
 	}
 
 	public String getNom() {
@@ -47,13 +48,14 @@ public class TypeLivre implements Serializable{
 		this.nom = nom;
 	}
 
-	public TypeLivre(String nom) {
+	public Editeur(String nom) {
 		super();
 		this.nom = nom;
 	}
 
-	public TypeLivre() {
+	public Editeur() {
 		super();
 	}
+	
 	
 }

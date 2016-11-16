@@ -5,9 +5,13 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import metier.entities.Auteur;
+import metier.entities.Client;
+import metier.entities.Compte;
+import metier.entities.Editeur;
 import metier.entities.Livre;
 import metier.entities.Promotion;
 import metier.entities.TypeLivre;
+import metier.entities.Vote;
 
 @Remote
 public interface IBiblioRemote {
@@ -39,4 +43,31 @@ public interface IBiblioRemote {
 	public TypeLivre consulterTypeLivre(Long id);
 	public void updateTypeLivre(TypeLivre type);
 	public void supprimerTypeLivre(Long id);
+	
+	public void ajouterClient(Client client);
+	public Client consulterClient(Long id);
+	public List<Compte> consulterClients();
+	public void updateClient(Client client);
+	public void supprimerClient(Long id);
+	
+	public void ajouterCompte(Compte compte);
+	public void supprimerCompte(String id);
+	public List<Compte> consulterComptes();
+	public Compte consulterCompte(Long id);
+	public void modifierCompte(Compte compte);
+	
+	public void ajouterEditeur(Editeur editeur);
+	public void supprimerEditeur(Long id);
+	public List<Editeur> consulterEditeurs();
+	public Editeur consulterEditeur(Long id);
+	public void modifierEditeur(Editeur editeur);
+	
+	public void ajouterVote(Vote vote);
+	public void supprimerVote(Long id);
+	public List<Vote> consulterVotes();
+	public Vote consulterVote(Long id);
+	public List<Vote> consulterVoteParLivre(Livre l);
+	public Vote consulterVoteParLivreEtClient(Livre l, Client c);
+	public List<Vote> consulterVoteParClient(Client c);
+	public void modifierVote(Vote vote);
 }

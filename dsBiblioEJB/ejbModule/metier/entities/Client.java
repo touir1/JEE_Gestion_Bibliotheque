@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.*;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="CLIENT")
@@ -24,14 +23,14 @@ public class Client implements Serializable{
 	private String email;
 	private String tel;
 	
-	@LazyCollection(LazyCollectionOption.FALSE)
+	@JsonIgnore
 	@OneToMany(mappedBy="client")
 	private Set<Vote> votes;
 	
 	@OneToOne(mappedBy = "client")
 	private Compte compte;
 	
-	@LazyCollection(LazyCollectionOption.FALSE)
+	@JsonIgnore
 	@OneToMany(mappedBy ="client")
 	private Set<Commande> commandes;
 	

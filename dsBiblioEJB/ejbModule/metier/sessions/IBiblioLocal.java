@@ -9,8 +9,11 @@ import metier.entities.Client;
 import metier.entities.Commande;
 import metier.entities.Compte;
 import metier.entities.Livre;
+import metier.entities.ModePaiement;
 import metier.entities.Panier;
+import metier.entities.Promotion;
 import metier.entities.TypeLivre;
+import metier.entities.Vote;
 
 @Local
 public interface IBiblioLocal {
@@ -28,12 +31,37 @@ public interface IBiblioLocal {
 	public List<Auteur> consulterAuteursByNom(String nom);
 	public Auteur consulterAuteur(Long id);
 	
-	public Commande enregistrerCommande(Panier p, Client c);
+	public Commande enregistrerCommande(Panier p, Client c, ModePaiement mode);
+	public Commande consulterCommande(Long id);
+	public List<Commande> consulterCommandes();
+	public List<Commande> consulterCommandesByClient();
+	public List<Commande> consulterCommandesByModePaiement();
 	
-	//public void ajouterClient(Client client);
-	//public void updateClient(Client client);
-	//public void supprimerClient(Client client);
+	public void ajouterClient(Client client);
+	public Client consulterClient(Long id);
+	public Client connexionClient(Compte compte);
+	public void updateClient(Client client);
 	
-	//public void ajouterCompte(Compte compte);
-	//public void supprimerCompte(Compte compte);
+	public void ajouterCompte(Compte compte);
+	public boolean authentification(Compte compte);
+	public void modifierCompte(Compte compte);
+	
+	public void ajouterVote(Vote vote);
+	public void modifierVote(Vote vote);
+	public Vote consulterVoteParLivreEtClient(Livre l, Client c);
+	public List<Vote> consulterVoteParClient(Client c);
+	
+	public void ajouterModePaiement(ModePaiement mode);
+	public void modifierModePaiement(ModePaiement mode);
+	public List<ModePaiement> consulterModePaiements();
+	public ModePaiement consulterModePaiement(Long id);
+	public void supprimerModePaiement(Long id);
+	
+	public void ajouterPromotion(Promotion promo);
+	public void modifierPromotion(Promotion promo);
+	public Promotion consulterPromotion(Long id);
+	public List<Promotion> consulterPromotions();
+	public void supprimerPromotion(Long id);
+	
+	//public List<Livre> test();
 }

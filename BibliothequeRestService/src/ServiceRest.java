@@ -1,3 +1,4 @@
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -30,5 +31,13 @@ public class ServiceRest {
 	public Livre consulterLivres(@PathParam(value="Id")Long ID_livre){
 		return metier.consulterLivre(ID_livre);
 	}
+	
+	@GET
+	@Path(value="/test")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Livre> testing(){
+		return metier.consulterLivresEnPromotion();
+	}
+	
 	
 }

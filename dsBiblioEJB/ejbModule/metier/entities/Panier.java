@@ -35,10 +35,12 @@ public class Panier implements Serializable{
 			lc.setLivre(l);
 			lc.setPrix(l.getPrix());
 			lc.setQuantite(quantite);
+			items.put(l.getID_livre(), lc);
 		}
 		else{
 			LigneCommande lc = items.get(l.getID_livre());
 			lc.setQuantite(lc.getQuantite()+quantite);
+			items.put(l.getID_livre(), lc);
 		}
 	}
 	

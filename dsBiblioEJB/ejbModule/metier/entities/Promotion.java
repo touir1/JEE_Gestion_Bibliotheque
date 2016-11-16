@@ -5,8 +5,7 @@ import java.util.Date;
 import java.util.Set;
 import javax.persistence.*;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="PROMOTION")
@@ -19,7 +18,7 @@ public class Promotion implements Serializable{
 	@Column(name="ID_promotion")
 	private Long ID_promotion;
 	
-	private int pourcentage;
+	private int	 pourcentage;
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name="DATE_debut")
@@ -27,9 +26,9 @@ public class Promotion implements Serializable{
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name="DATE_fin")
-	private Date datefin;
+	private Date dateFin;
 	
-	@LazyCollection(LazyCollectionOption.FALSE)
+	@JsonIgnore
 	@OneToMany(mappedBy = "promotion")
 	private Set<LigneLivrePromotion> ligneLivrePromotions;
 
@@ -65,19 +64,19 @@ public class Promotion implements Serializable{
 		this.dateDebut = dateDebut;
 	}
 
-	public Date getDatefin() {
-		return datefin;
+	public Date getDateFin() {
+		return dateFin;
 	}
 
-	public void setDatefin(Date datefin) {
-		this.datefin = datefin;
+	public void setDateFin(Date datefin) {
+		this.dateFin = datefin;
 	}
 
 	public Promotion(int pourcentage, Date dateDebut, Date datefin) {
 		super();
 		this.pourcentage = pourcentage;
 		this.dateDebut = dateDebut;
-		this.datefin = datefin;
+		this.dateFin = datefin;
 	}
 
 	public Promotion() {
