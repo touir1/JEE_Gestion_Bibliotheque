@@ -1,15 +1,12 @@
 import java.awt.EventQueue;
-import java.util.Properties;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.swing.JFrame;
 
 import metier.sessions.IBiblioRemote;
 
 public class GestionAuteur {
 
-	private JFrame frame;
+	public JFrame frame;
 	private IBiblioRemote stub;
 
 	/**
@@ -33,7 +30,6 @@ public class GestionAuteur {
 	 */
 	public GestionAuteur() {
 		//connection
-		ClientEJB.initialisation();
 		stub = ClientEJB.getStub();
 		
 		initialize();

@@ -12,7 +12,7 @@ public final class ClientEJB {
 	
 	private ClientEJB(){}
 	
-	public static void initialisation(){
+	private static void initialisation(){
 		//connection
 		if(stub==null){
 			try{
@@ -20,7 +20,7 @@ public final class ClientEJB {
 				properties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
 				context = new InitialContext(properties);
 				
-				stub = (IBiblioRemote) context.lookup("ejb:WebServiceRest/dsBiblioEJB/dsBiblioEJB!metier.sessions.IBiblioRemote");
+				stub = (IBiblioRemote) context.lookup("ejb:ServiceProject/dsBiblioEJB/dsBiblioEJB!metier.sessions.IBiblioRemote");
 			}
 			catch(Exception e){
 				System.out.println("ERROR:");
@@ -30,6 +30,7 @@ public final class ClientEJB {
 	}
 
 	public static IBiblioRemote getStub() {
+		initialisation();
 		return stub;
 	}
 

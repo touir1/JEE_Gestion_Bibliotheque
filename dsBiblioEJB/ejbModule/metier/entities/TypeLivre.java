@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -23,6 +24,7 @@ public class TypeLivre implements Serializable{
 	@ManyToMany
 	private Set<Livre> livres;
 	
+	@XmlTransient
 	public Set<Livre> getLivres() {
 		return livres;
 	}

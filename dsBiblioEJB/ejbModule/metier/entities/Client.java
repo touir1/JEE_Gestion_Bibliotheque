@@ -3,6 +3,7 @@ package metier.entities;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -34,8 +35,7 @@ public class Client implements Serializable{
 	@OneToMany(mappedBy ="client")
 	private Set<Commande> commandes;
 	
-	public Client(String nom, String prenom, String adresse, String email, String tel, Compte compte,
-			Set<Commande> commandes) {
+	public Client(String nom, String prenom, String adresse, String email, String tel, Compte compte) {
 		super();
 		this.nom = nom;
 		this.prenom = prenom;
@@ -43,7 +43,6 @@ public class Client implements Serializable{
 		this.email = email;
 		this.tel = tel;
 		this.compte = compte;
-		this.commandes = commandes;
 	}
 	public Client(String nom, String prenom, String adresse, String email, String tel) {
 		super();
@@ -71,6 +70,7 @@ public class Client implements Serializable{
 	public void setTel(String tel) {
 		this.tel = tel;
 	}
+	@XmlTransient
 	public Set<Commande> getCommandes() {
 		return commandes;
 	}
@@ -101,7 +101,7 @@ public class Client implements Serializable{
 	public void setCompte(Compte compte) {
 		this.compte = compte;
 	}
-	
+	@XmlTransient
 	public Set<Vote> getVotes() {
 		return votes;
 	}

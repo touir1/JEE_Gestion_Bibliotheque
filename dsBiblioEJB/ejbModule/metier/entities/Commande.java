@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -33,7 +34,7 @@ public class Commande implements Serializable{
 	@OneToMany(mappedBy= "commande")
 	private Set<LigneCommande> ligneCommandes;
 	
-
+	@XmlTransient
 	public Set<LigneCommande> getLigneCommandes() {
 		return ligneCommandes;
 	}

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -41,6 +42,7 @@ public class ModePaiement implements Serializable{
 		super();
 	}
 
+	@XmlTransient
 	public Set<Commande> getCommandes() {
 		return commandes;
 	}

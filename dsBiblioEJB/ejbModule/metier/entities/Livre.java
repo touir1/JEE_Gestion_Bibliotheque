@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -30,22 +31,22 @@ public class Livre implements Serializable {
 	private double prix;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy= "livre")
+	@OneToMany(mappedBy= "livre", fetch = FetchType.LAZY)
 	private Set<LigneCommande> ligneCommandes;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "livre")
+	@OneToMany(mappedBy = "livre", fetch = FetchType.LAZY)
 	private Set<LigneLivrePromotion> ligneLivrePromotions;
 	
 	@ManyToOne
 	private Auteur auteur;
-	
+
 	@JsonIgnore
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<TypeLivre> types;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="livre")
+	@OneToMany(mappedBy="livre", fetch = FetchType.LAZY)
 	private Set<Vote> votes;
 	
 	@ManyToOne
@@ -59,6 +60,7 @@ public class Livre implements Serializable {
 		this.editeur = editeur;
 	}
 
+	@XmlTransient
 	public Set<Vote> getVotes() {
 		return votes;
 	}
@@ -67,6 +69,7 @@ public class Livre implements Serializable {
 		this.votes = votes;
 	}
 
+	@XmlTransient
 	public Set<TypeLivre> getTypes() {
 		return types;
 	}
@@ -83,6 +86,7 @@ public class Livre implements Serializable {
 		this.auteur = auteur;
 	}
 
+	@XmlTransient
 	public Set<LigneLivrePromotion> getLigneLivrePromotions() {
 		return ligneLivrePromotions;
 	}
@@ -141,6 +145,7 @@ public class Livre implements Serializable {
 		this.dateApparition = dateApparition;
 	}
 	
+	@XmlTransient
 	public Set<LigneCommande> getLigneCommandes() {
 		return ligneCommandes;
 	}

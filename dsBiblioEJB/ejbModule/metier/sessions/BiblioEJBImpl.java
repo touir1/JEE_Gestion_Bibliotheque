@@ -102,14 +102,14 @@ public class BiblioEJBImpl implements IBiblioRemote,IBiblioLocal{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<TypeLivre> consulterTypeLivres() {
-		Query q=E.createQuery("select T from type_livre T");
+		Query q=E.createQuery("select T from TypeLivre T");
 		return q.getResultList();
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<TypeLivre> consulterTypeLivresByNom(String nom){
-		Query q=E.createQuery("select T from type_livre T where T.nom LIKE '%"+nom+"%'");
+		Query q=E.createQuery("select T from TypeLivre T where T.nom LIKE '%"+nom+"%'");
 		return q.getResultList();
 	}
 
@@ -138,7 +138,7 @@ public class BiblioEJBImpl implements IBiblioRemote,IBiblioLocal{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Auteur> consulterAuteurs() {
-		Query q=E.createQuery("select A from AUTEUR A");
+		Query q=E.createQuery("select A from Auteur A");
 		return q.getResultList();
 	}
 
@@ -190,7 +190,7 @@ public class BiblioEJBImpl implements IBiblioRemote,IBiblioLocal{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Auteur> consulterAuteursByNom(String nom) {
-		Query q=E.createQuery("select A from AUTEUR A where A.nom LIKE '%"+nom+"%'");
+		Query q=E.createQuery("select A from Auteur A where A.nom LIKE '%"+nom+"%'");
 		return q.getResultList();
 	}
 
@@ -223,7 +223,7 @@ public class BiblioEJBImpl implements IBiblioRemote,IBiblioLocal{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Compte> consulterClients() {
-		Query q=E.createQuery("select C from CLIENT C");
+		Query q=E.createQuery("select C from Client C");
 		return q.getResultList();
 	}
 

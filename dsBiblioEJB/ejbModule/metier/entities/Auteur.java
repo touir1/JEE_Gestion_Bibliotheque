@@ -6,6 +6,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name="AUTEUR")
@@ -33,6 +34,7 @@ public class Auteur implements Serializable{
 		this.prenom = prenom;
 	}
 
+	@XmlTransient
 	public Set<Livre> getLivres() {
 		return livres;
 	}

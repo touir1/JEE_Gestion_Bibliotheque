@@ -3,8 +3,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,17 +17,18 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import com.toedter.calendar.JDateChooser;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
+import metier.entities.Auteur;
+import metier.entities.Editeur;
 import metier.entities.Livre;
 import metier.sessions.IBiblioRemote;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 
 public class GesiontLivre {
 	
-	private JFrame frame;
+	public JFrame frame;
 	private JTextField txt_nomLivre;
 	private JTable table_livres;
 	private JRadioButton rdbtn_AjouterLivre;
@@ -45,11 +44,17 @@ public class GesiontLivre {
 	private JLabel lbl_Dnt;
 	private DefaultTableModel table_model;
 	private JScrollPane scrollPane;
+	private JComboBox<String> cb_Auteur;
+	private JComboBox<String> cb_Editeur;
+	private JLabel lbl_Editeur;
+	private JLabel lbl_Auteur;
 	
 	private IBiblioRemote stub;
 	
 	private List<Livre> livres;
 	private int selected;
+	private List<Auteur> auteurs;
+	private List<Editeur> editeurs;
 	
 	boolean isDouble(String d){
 		try{
@@ -82,7 +87,6 @@ public class GesiontLivre {
 	 */
 	public GesiontLivre() {
 		//connection
-		ClientEJB.initialisation();
 		stub = ClientEJB.getStub();
 		
 		initialize();
@@ -96,6 +100,16 @@ public class GesiontLivre {
 	private void PreExecution(){
 		
 		livres = stub.consulterLivres();
+		auteurs = stub.consulterAuteurs();
+		editeurs = stub.consulterEditeurs();
+		
+		for(int i=0;i<auteurs.size();i++){
+			cb_Auteur.addItem(auteurs.get(i).getNom()+" "+auteurs.get(i).getPrenom());
+		}
+		
+		for(int i=0;i<editeurs.size();i++){
+			cb_Editeur.addItem(editeurs.get(i).getNom());
+		}
 		
 		if(table_model.getColumnCount()==0){
 			table_model.addColumn("ID_livre");
@@ -134,6 +148,7 @@ public class GesiontLivre {
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	@SuppressWarnings("serial")
 	private void initialize() {
 		
 		//Instanciation + initialisation
@@ -160,6 +175,10 @@ public class GesiontLivre {
 		lbl_Dnt = new JLabel("TND");
 		scrollPane = new JScrollPane();
 		selected = -1;
+		cb_Auteur= new JComboBox<String>();
+		cb_Editeur = new JComboBox<String>();
+		lbl_Auteur = new JLabel("Auteur :");
+		lbl_Editeur = new JLabel("Editeur :");
 		
 		//parametres frame
 		frame.setTitle("Gestion Livre");
@@ -180,8 +199,10 @@ public class GesiontLivre {
 		table_livres.setEnabled(false);
 		lbl_Prix.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		scrollPane.setSize(581, 188);
-		scrollPane.setLocation(112, 234);
+		scrollPane.setLocation(112, 247);
 		scrollPane.setViewportView(table_livres);
+		lbl_Auteur.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		lbl_Editeur.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		
 		//emplacements
 		table_livres.setBounds(156, 242, 557, 160);
@@ -197,6 +218,10 @@ public class GesiontLivre {
 		lbl_Prix.setBounds(146, 153, 45, 19);
 		txt_Prix.setBounds(201, 151, 180, 20);
 		lbl_Dnt.setBounds(384, 153, 32, 14);
+		cb_Auteur.setBounds(201, 182, 203, 20);
+		cb_Editeur.setBounds(201, 213, 203, 20);
+		lbl_Editeur.setBounds(128, 212, 61, 19);
+		lbl_Auteur.setBounds(130, 183, 61, 19);
 		
 		//listeners
 		rdbtn_AjouterLivre.addActionListener(new ActionListener() {
@@ -338,6 +363,10 @@ public class GesiontLivre {
 		frame.getContentPane().add(lbl_Prix);
 		frame.getContentPane().add(txt_Prix);
 		frame.getContentPane().add(lbl_Dnt);
+		frame.getContentPane().add(cb_Editeur);
+		frame.getContentPane().add(cb_Auteur);
+		frame.getContentPane().add(lbl_Editeur);
+		frame.getContentPane().add(lbl_Auteur);
 		
 	}
 }

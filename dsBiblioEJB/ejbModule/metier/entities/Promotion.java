@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,6 +33,7 @@ public class Promotion implements Serializable{
 	@OneToMany(mappedBy = "promotion")
 	private Set<LigneLivrePromotion> ligneLivrePromotions;
 
+	@XmlTransient
 	public Set<LigneLivrePromotion> getLigneLivrePromotions() {
 		return ligneLivrePromotions;
 	}
