@@ -25,14 +25,14 @@ public class Client implements Serializable{
 	private String tel;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="client")
+	@OneToMany(mappedBy="client",cascade = CascadeType.REMOVE)
 	private Set<Vote> votes;
 	
-	@OneToOne(mappedBy = "client")
+	@OneToOne(mappedBy = "client",cascade = CascadeType.REMOVE)
 	private Compte compte;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy ="client")
+	@OneToMany(mappedBy ="client",cascade = CascadeType.REMOVE)
 	private Set<Commande> commandes;
 	
 	public Client(String nom, String prenom, String adresse, String email, String tel, Compte compte) {

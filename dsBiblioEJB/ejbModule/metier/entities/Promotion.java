@@ -30,16 +30,16 @@ public class Promotion implements Serializable{
 	private Date dateFin;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "promotion")
-	private Set<LigneLivrePromotion> ligneLivrePromotions;
+	@ManyToMany
+	private Set<Livre> livres;
 
 	@XmlTransient
-	public Set<LigneLivrePromotion> getLigneLivrePromotions() {
-		return ligneLivrePromotions;
+	public Set<Livre> getLivres() {
+		return livres;
 	}
 
-	public void setLigneLivrePromotions(Set<LigneLivrePromotion> ligneLivrePromotions) {
-		this.ligneLivrePromotions = ligneLivrePromotions;
+	public void setLivres(Set<Livre> livres) {
+		this.livres = livres;
 	}
 
 	public Long getID_promotion() {

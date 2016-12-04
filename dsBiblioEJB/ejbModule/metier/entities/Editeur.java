@@ -22,7 +22,7 @@ public class Editeur implements Serializable{
 	private String nom;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="editeur")
+	@OneToMany(mappedBy="editeur",cascade = CascadeType.REMOVE)
 	private Set<Livre> livres;
 
 	@XmlTransient

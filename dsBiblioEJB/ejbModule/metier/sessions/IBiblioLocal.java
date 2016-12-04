@@ -34,8 +34,8 @@ public interface IBiblioLocal {
 	public Commande enregistrerCommande(Panier p, Client c, ModePaiement mode);
 	public Commande consulterCommande(Long id);
 	public List<Commande> consulterCommandes();
-	public List<Commande> consulterCommandesByClient();
-	public List<Commande> consulterCommandesByModePaiement();
+	public List<Commande> consulterCommandesByClient(Client c);
+	public List<Commande> consulterCommandesByModePaiement(ModePaiement mp);
 	
 	public void ajouterClient(Client client);
 	public Client consulterClient(Long id);
@@ -51,17 +51,11 @@ public interface IBiblioLocal {
 	public Vote consulterVoteParLivreEtClient(Livre l, Client c);
 	public List<Vote> consulterVoteParClient(Client c);
 	
-	public void ajouterModePaiement(ModePaiement mode);
-	public void modifierModePaiement(ModePaiement mode);
 	public List<ModePaiement> consulterModePaiements();
 	public ModePaiement consulterModePaiement(Long id);
-	public void supprimerModePaiement(Long id);
 	
-	public void ajouterPromotion(Promotion promo);
-	public void modifierPromotion(Promotion promo);
 	public Promotion consulterPromotion(Long id);
 	public List<Promotion> consulterPromotions();
-	public void supprimerPromotion(Long id);
 	
 	//public List<Livre> test();
 }

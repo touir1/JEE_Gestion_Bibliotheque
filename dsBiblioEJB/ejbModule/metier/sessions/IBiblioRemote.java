@@ -9,6 +9,7 @@ import metier.entities.Client;
 import metier.entities.Compte;
 import metier.entities.Editeur;
 import metier.entities.Livre;
+import metier.entities.ModePaiement;
 import metier.entities.Promotion;
 import metier.entities.TypeLivre;
 import metier.entities.Vote;
@@ -20,15 +21,10 @@ public interface IBiblioRemote {
 	public Livre consulterLivre(Long id);
 	public List<Livre> consulterLivresByAuteur(Auteur auteur);
 	public List<Livre> consulterLivresByType(TypeLivre type);
+	public List<Livre> consulterLivresByPromotion(Promotion promo);
 	public List<Livre> consulterLivresEnPromotion();
 	public void updateLivre(Livre l);
 	public void supprimerLivre(Long id);
-	
-	public void addPromotion(Promotion p);
-	public List<Promotion> consulterPromotions();
-	public Promotion consulterPromotion(Long id);
-	public void updatePromotion(Promotion P);
-	public void supprimerPromotion(Long id);
 	
 	public void addAuteur(Auteur auteur);
 	public List<Auteur> consulterAuteurs();
@@ -70,4 +66,18 @@ public interface IBiblioRemote {
 	public Vote consulterVoteParLivreEtClient(Livre l, Client c);
 	public List<Vote> consulterVoteParClient(Client c);
 	public void modifierVote(Vote vote);
+	
+	public void ajouterModePaiement(ModePaiement mp);
+	public void supprimerModePaiement(Long id);
+	public List<ModePaiement> consulterModePaiements();
+	public ModePaiement consulterModePaiement(Long id);
+	public void modifierModePaiement(ModePaiement mp);
+	
+	public void ajouterPromotion(Promotion promo);
+	public void modifierPromotion(Promotion promo);
+	public Promotion consulterPromotion(Long id);
+	public List<Promotion> consulterPromotions();
+	public void supprimerPromotion(Long id);
+	public List<Promotion> consulterPromotionEnCours();
+	
 }

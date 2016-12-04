@@ -31,12 +31,12 @@ public class Livre implements Serializable {
 	private double prix;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy= "livre", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy= "livre", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
 	private Set<LigneCommande> ligneCommandes;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "livre", fetch = FetchType.LAZY)
-	private Set<LigneLivrePromotion> ligneLivrePromotions;
+	@ManyToMany(mappedBy = "livres", fetch = FetchType.LAZY)
+	private Set<Promotion> promotions;
 	
 	@ManyToOne
 	private Auteur auteur;
@@ -46,7 +46,7 @@ public class Livre implements Serializable {
 	private Set<TypeLivre> types;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="livre", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="livre", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
 	private Set<Vote> votes;
 	
 	@ManyToOne
@@ -87,12 +87,12 @@ public class Livre implements Serializable {
 	}
 
 	@XmlTransient
-	public Set<LigneLivrePromotion> getLigneLivrePromotions() {
-		return ligneLivrePromotions;
+	public Set<Promotion> getPromotions() {
+		return promotions;
 	}
 
-	public void setLigneLivrePromotions(Set<LigneLivrePromotion> ligneLivrePromotions) {
-		this.ligneLivrePromotions = ligneLivrePromotions;
+	public void setPromotions(Set<Promotion> promotions) {
+		this.promotions = promotions;
 	}
 
 	public Livre(String nomLivre, double prix) {

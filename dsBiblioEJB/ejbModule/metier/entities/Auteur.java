@@ -23,7 +23,7 @@ public class Auteur implements Serializable{
 	private String prenom;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="auteur")
+	@OneToMany(mappedBy="auteur",cascade = CascadeType.REMOVE)
 	private Set<Livre> livres;
 	
 	public String getPrenom() {

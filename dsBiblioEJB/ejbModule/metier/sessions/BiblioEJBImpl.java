@@ -65,11 +65,6 @@ public class BiblioEJBImpl implements IBiblioRemote,IBiblioLocal{
 		E.remove(l);
 	}
 
-	@Override
-	public void addPromotion(Promotion p) {
-		E.persist(p);
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Promotion> consulterPromotions() {
@@ -81,11 +76,6 @@ public class BiblioEJBImpl implements IBiblioRemote,IBiblioLocal{
 	public Promotion consulterPromotion(Long id) {
 		Promotion p = E.find(Promotion.class, id);
 		return p;
-	}
-
-	@Override
-	public void updatePromotion(Promotion P) {
-		E.merge(P);
 	}
 
 	@Override
@@ -277,7 +267,6 @@ public class BiblioEJBImpl implements IBiblioRemote,IBiblioLocal{
 	public void supprimerEditeur(Long id) {
 		Editeur e = E.find(Editeur.class, id);
 		E.remove(e);
-		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -300,116 +289,139 @@ public class BiblioEJBImpl implements IBiblioRemote,IBiblioLocal{
 
 	@Override
 	public void ajouterVote(Vote vote) {
-		// TODO Auto-generated method stub
+		E.persist(vote);
 		
 	}
 
 	@Override
 	public void supprimerVote(Long id) {
-		// TODO Auto-generated method stub
-		
+		Vote e = E.find(Vote.class, id);
+		E.remove(e);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Vote> consulterVotes() {
-		// TODO Auto-generated method stub
-		return null;
+		Query q = E.createQuery("select V from Vote V");
+		return q.getResultList();
 	}
 
 	@Override
 	public Vote consulterVote(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Vote e= E.find(Vote.class, id);
+		return e;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Vote> consulterVoteParLivre(Livre l) {
-		// TODO Auto-generated method stub
-		return null;
+		Query q = E.createQuery("select V from Vote V where V.livre.ID_livre = "+l.getID_livre());
+		return q.getResultList();
 	}
 
 	@Override
 	public Vote consulterVoteParLivreEtClient(Livre l, Client c) {
-		// TODO Auto-generated method stub
-		return null;
+		Query q = E.createQuery("select V from Vote V where V.livre.ID_livre = "+l.getID_livre()
+								+" and V.client.num_client = "+c.getNum_client());
+		return (Vote) q.getSingleResult();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Vote> consulterVoteParClient(Client c) {
-		// TODO Auto-generated method stub
-		return null;
+		Query q = E.createQuery("select V from Vote V where"
+		+" V.client.num_client = "+c.getNum_client());
+return q.getResultList();
 	}
 
 	@Override
 	public void modifierVote(Vote vote) {
-		// TODO Auto-generated method stub
+		E.merge(vote);
 		
 	}
 
 	@Override
 	public Commande consulterCommande(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Commande e= E.find(Commande.class, id);
+		return e;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Commande> consulterCommandes() {
-		// TODO Auto-generated method stub
-		return null;
+		Query q = E.createQuery("select C from Commande C");
+		return q.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<Commande> consulterCommandesByClient() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Commande> consulterCommandesByClient(Client c) {
+		Query q = E.createQuery("select C from Commande C where"
+				+ " C.client.num_client = "+c.getNum_client());
+		return q.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<Commande> consulterCommandesByModePaiement() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Commande> consulterCommandesByModePaiement(ModePaiement mp) {
+		Query q = E.createQuery("select C from Commande C where"
+				+ " C.modePaiement.id = "+mp.getId());
+		return q.getResultList();
 	}
 
 	@Override
 	public void ajouterModePaiement(ModePaiement mode) {
-		// TODO Auto-generated method stub
-		
+		E.persist(mode);
 	}
 
 	@Override
 	public void modifierModePaiement(ModePaiement mode) {
-		// TODO Auto-generated method stub
-		
+		E.merge(mode);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<ModePaiement> consulterModePaiements() {
-		// TODO Auto-generated method stub
-		return null;
+		Query q = E.createQuery("select M from ModePaiement M");
+		return q.getResultList();
 	}
 
 	@Override
 	public ModePaiement consulterModePaiement(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		ModePaiement e= E.find(ModePaiement.class, id);
+		return e;
 	}
 
 	@Override
 	public void supprimerModePaiement(Long id) {
-		// TODO Auto-generated method stub
-		
+		ModePaiement e = E.find(ModePaiement.class, id);
+		E.remove(e);
 	}
 
 	@Override
 	public void ajouterPromotion(Promotion promo) {
-		// TODO Auto-generated method stub
-		
+		E.persist(promo);
 	}
 
 	@Override
 	public void modifierPromotion(Promotion promo) {
-		// TODO Auto-generated method stub
-		
+		E.merge(promo);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Promotion> consulterPromotionEnCours() {
+		Query q=E.createQuery("select P from Promotion P"
+				  +" where CURDATE() between P.dateDebut and P.dateFin");
+		return q.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Livre> consulterLivresByPromotion(Promotion promo) {
+		Query q=E.createQuery("select P.livres from Promotion P where "
+				+"P.ID_promotion = "+promo.getID_promotion());
+		return q.getResultList();
 	}
 	
 	/*@Override

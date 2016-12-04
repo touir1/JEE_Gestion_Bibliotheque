@@ -23,7 +23,7 @@ public class ModePaiement implements Serializable{
 	private boolean active;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="modePaiement")
+	@OneToMany(mappedBy="modePaiement",cascade = CascadeType.REMOVE)
 	private Set<Commande> commandes;
 	
 	public ModePaiement(String name,boolean active){

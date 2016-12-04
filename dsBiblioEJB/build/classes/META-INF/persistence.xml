@@ -8,8 +8,6 @@
 		<class>metier.entities.Compte</class>
 		<class>metier.entities.LigneCommande</class>
 		<class>metier.entities.LigneCommandePK</class>
-		<class>metier.entities.LigneLivrePromotionPK</class>
-		<class>metier.entities.LigneLivrePromotion</class>
 		<class>metier.entities.Livre</class>
 		<class>metier.entities.Promotion</class>
 		<class>metier.entities.TypeLivre</class>

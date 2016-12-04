@@ -31,7 +31,7 @@ public class Commande implements Serializable{
 	Client client;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy= "commande")
+	@OneToMany(mappedBy= "commande",cascade = CascadeType.REMOVE)
 	private Set<LigneCommande> ligneCommandes;
 	
 	@XmlTransient
