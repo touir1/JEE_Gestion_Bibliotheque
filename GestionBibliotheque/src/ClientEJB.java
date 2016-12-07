@@ -20,7 +20,7 @@ public final class ClientEJB {
 				properties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
 				context = new InitialContext(properties);
 				
-				stub = (IBiblioRemote) context.lookup("ejb:ServiceProject/dsBiblioEJB/dsBiblioEJB!metier.sessions.IBiblioRemote");
+				stub = (IBiblioRemote) context.lookup("ejb:Project_ear/dsBiblioEJB/dsBiblioEJB!metier.sessions.IBiblioRemote");
 			}
 			catch(Exception e){
 				System.out.println("ERROR:");

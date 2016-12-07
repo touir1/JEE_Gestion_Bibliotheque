@@ -17,11 +17,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import com.toedter.calendar.JDateChooser;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import metier.entities.Auteur;
 import metier.entities.Editeur;
 import metier.entities.Livre;
+import metier.entities.TypeLivre;
 import metier.sessions.IBiblioRemote;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -31,6 +34,18 @@ public class GestionLivre {
 	public JFrame frame;
 	private JTextField txt_nomLivre;
 	private JTable table_livres;
+	private JTable table_type;
+	private JTable table_noType;
+	private DefaultTableModel table_modelType;
+	private DefaultTableModel table_modelNoType;
+	//private JScrollPane scrollPanePromo;
+	//private JScrollPane scrollPaneLivre;
+	private JScrollPane scrollPaneType;
+	private JScrollPane scrollPaneNoType;
+	private JLabel lbl_Type;
+	private JLabel lbl_notType;
+	private JButton btn_removeType;
+	private JButton btn_addType;
 	private JRadioButton rdbtn_AjouterLivre;
 	private JRadioButton rdbtn_ModifierLivre;
 	private JRadioButton rdbtn_SupprimerLivre;
@@ -52,7 +67,12 @@ public class GestionLivre {
 	private IBiblioRemote stub;
 	
 	private List<Livre> livres;
+	private List<TypeLivre> types;
+	private List<TypeLivre> notTypes;
+	private List<TypeLivre> allTypes;
 	private int selected;
+	private int selected1;
+	private int selected2;
 	private List<Auteur> auteurs;
 	private List<Editeur> editeurs;
 	
@@ -102,6 +122,13 @@ public class GestionLivre {
 		livres = stub.consulterLivres();
 		auteurs = stub.consulterAuteurs();
 		editeurs = stub.consulterEditeurs();
+		allTypes = stub.consulterTypeLivres();
+		
+		types = new ArrayList<TypeLivre>();
+		
+		notTypes = new ArrayList<TypeLivre>();
+		notTypes.addAll(allTypes);
+		notTypes.removeAll(types);
 		
 		cb_Auteur.removeAllItems();
 		cb_Editeur.removeAllItems();
@@ -123,8 +150,20 @@ public class GestionLivre {
 			table_model.addColumn("Prix");
 		}
 		
+		if(table_modelType.getColumnCount()==0){
+			table_modelType.addColumn("Type");
+		}
+		
+		if(table_modelNoType.getColumnCount()==0){
+			table_modelNoType.addColumn("Type");
+		}
+		
 		while(table_model.getRowCount()!=0)
 			table_model.removeRow(0);
+		while(table_modelType.getRowCount()!=0)
+			table_modelType.removeRow(0);
+		while(table_modelNoType.getRowCount()!=0)
+			table_modelNoType.removeRow(0);
 		
 		for(int i=0;i<livres.size();i++){
 			String[] row = new String[6];
@@ -143,6 +182,104 @@ public class GestionLivre {
 			table_model.addRow(row);
 		}
 		
+		for(int i=0;i<types.size();i++){
+			String[] row = new String[1];
+			if(types.get(i).getNom().toString()==null) row[0]="NULL";
+			else row[0]=types.get(i).getNom();
+			table_modelType.addRow(row);
+		}
+		
+		for(int i=0;i<notTypes.size();i++){
+			String[] row = new String[1];
+			if(notTypes.get(i).getNom().toString()==null) row[0]="NULL";
+			else row[0]=notTypes.get(i).getNom();
+			table_modelNoType.addRow(row);
+		}
+		
+	}
+	
+	private void initTypes(){
+		allTypes = stub.consulterTypeLivres();
+		
+		types = new ArrayList<TypeLivre>();
+		
+		notTypes = new ArrayList<TypeLivre>();
+		notTypes.addAll(allTypes);
+		
+		if(table_modelType.getColumnCount()==0){
+			table_modelType.addColumn("Type");
+		}
+		
+		if(table_modelNoType.getColumnCount()==0){
+			table_modelNoType.addColumn("Type");
+		}
+		
+		while(table_modelType.getRowCount()!=0)
+			table_modelType.removeRow(0);
+		while(table_modelNoType.getRowCount()!=0)
+			table_modelNoType.removeRow(0);
+		
+		for(int i=0;i<types.size();i++){
+			String[] row = new String[1];
+			if(types.get(i).getNom().toString()==null) row[0]="NULL";
+			else row[0]=types.get(i).getNom();
+			table_modelType.addRow(row);
+		}
+		
+		for(int i=0;i<notTypes.size();i++){
+			String[] row = new String[1];
+			if(notTypes.get(i).getNom().toString()==null) row[0]="NULL";
+			else row[0]=notTypes.get(i).getNom();
+			table_modelNoType.addRow(row);
+		}
+	}
+	
+	void showTypes(Long id){
+		allTypes = stub.consulterTypeLivres();
+		
+		Livre l = new Livre();
+		l.setID_livre(id);
+		
+		types = new ArrayList<TypeLivre>();
+		types.addAll(stub.consulterTypeByLivre(l));
+		
+		notTypes = new ArrayList<TypeLivre>();
+		notTypes.addAll(allTypes);
+		for(int i=0;i<types.size();i++){
+			for(int j=0;j<notTypes.size();j++){
+				if(notTypes.get(j).getId()==types.get(i).getId()){
+					notTypes.remove(j);
+					break;
+				}
+			}
+		}
+		
+		if(table_modelType.getColumnCount()==0){
+			table_modelType.addColumn("Type");
+		}
+		
+		if(table_modelNoType.getColumnCount()==0){
+			table_modelNoType.addColumn("Type");
+		}
+		
+		while(table_modelType.getRowCount()!=0)
+			table_modelType.removeRow(0);
+		while(table_modelNoType.getRowCount()!=0)
+			table_modelNoType.removeRow(0);
+		
+		for(int i=0;i<types.size();i++){
+			String[] row = new String[1];
+			if(types.get(i).getNom().toString()==null) row[0]="NULL";
+			else row[0]=types.get(i).getNom();
+			table_modelType.addRow(row);
+		}
+		
+		for(int i=0;i<notTypes.size();i++){
+			String[] row = new String[1];
+			if(notTypes.get(i).getNom().toString()==null) row[0]="NULL";
+			else row[0]=notTypes.get(i).getNom();
+			table_modelNoType.addRow(row);
+		}
 	}
 	
 	private void ViderChamps(){
@@ -174,7 +311,31 @@ public class GestionLivre {
 		       return false;
 		    }
 		};
+		table_modelType = new DefaultTableModel(){
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       //all cells false
+		       return false;
+		    }
+		};
+		table_modelNoType = new DefaultTableModel(){
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       //all cells false
+		       return false;
+		    }
+		};
+		table_type = new JTable(table_modelType);
+		table_noType = new JTable(table_modelNoType);
 		table_livres = new JTable(table_model);
+		scrollPaneType = new JScrollPane();
+		scrollPaneNoType = new JScrollPane();
+		btn_removeType = new JButton(">");
+		btn_addType = new JButton("<");
+		lbl_Type = new JLabel("Types ajoutés");
+		lbl_notType = new JLabel("Types livres");
+		selected1 = -1;
+		selected2 = -1;
 		btn_Appliquer = new JButton("Appliquer");
 		lbl_Prix = new JLabel("Prix :");
 		txt_Prix = new JTextField();
@@ -188,7 +349,7 @@ public class GestionLivre {
 		
 		//parametres frame
 		frame.setTitle("Gestion Livre");
-		frame.setSize(800, 500);
+		frame.setSize(900, 500);
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
@@ -196,6 +357,10 @@ public class GestionLivre {
 		frame.getContentPane().setLayout(null);
 		
 		//parametres composants
+		scrollPaneType.setViewportView(table_type);
+		scrollPaneNoType.setViewportView(table_noType);
+		lbl_Type.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		lbl_notType.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		lbl_titreFenetre.setForeground(new Color(100, 149, 237));
 		lbl_titreFenetre.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_titreFenetre.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 22));		
@@ -205,30 +370,36 @@ public class GestionLivre {
 		table_livres.setEnabled(false);
 		lbl_Prix.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		scrollPane.setSize(668, 188);
-		scrollPane.setLocation(65, 247);
+		scrollPane.setLocation(21, 249);
 		scrollPane.setViewportView(table_livres);
 		lbl_Auteur.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		lbl_Editeur.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		rdbtn_AjouterLivre.setSelected(true);
 		
 		//emplacements
+		scrollPaneType.setBounds(395, 86, 195, 144);
+		scrollPaneNoType.setBounds(675, 85, 195, 144);
+		lbl_Type.setBounds(446, 56, 96, 19);
+		lbl_notType.setBounds(736, 56, 120, 19);
+		btn_removeType.setBounds(600, 165, 59, 23);
+		btn_addType.setBounds(600, 131, 59, 23);
 		table_livres.setBounds(156, 242, 557, 160);
-		rdbtn_AjouterLivre.setBounds(604, 96, 141, 23);
-		rdbtn_ModifierLivre.setBounds(604, 122, 141, 23);
-		rdbtn_SupprimerLivre.setBounds(604, 148, 141, 23);
-		dateApparition.setBounds(201, 122, 203, 20);
-		txt_nomLivre.setBounds(200, 93, 204, 20);
-		lbl_NomLivre.setBounds(89, 92, 101, 19);
-		lbl_DateApparition.setBounds(65, 122, 126, 19);
+		rdbtn_AjouterLivre.setBounds(715, 264, 141, 23);
+		rdbtn_ModifierLivre.setBounds(715, 290, 141, 23);
+		rdbtn_SupprimerLivre.setBounds(715, 316, 141, 23);
+		dateApparition.setBounds(170, 115, 203, 20);
+		txt_nomLivre.setBounds(169, 86, 204, 20);
+		lbl_NomLivre.setBounds(58, 85, 101, 19);
+		lbl_DateApparition.setBounds(34, 115, 126, 19);
 		lbl_titreFenetre.setBounds(171, 11, 419, 47);
-		btn_Appliquer.setBounds(604, 193, 89, 23);
-		lbl_Prix.setBounds(146, 153, 45, 19);
-		txt_Prix.setBounds(201, 151, 180, 20);
-		lbl_Dnt.setBounds(384, 153, 32, 14);
-		cb_Auteur.setBounds(201, 182, 203, 20);
-		cb_Editeur.setBounds(201, 213, 203, 20);
-		lbl_Editeur.setBounds(128, 212, 61, 19);
-		lbl_Auteur.setBounds(130, 183, 61, 19);
+		btn_Appliquer.setBounds(715, 361, 89, 23);
+		lbl_Prix.setBounds(115, 146, 45, 19);
+		txt_Prix.setBounds(170, 144, 180, 20);
+		lbl_Dnt.setBounds(353, 146, 32, 14);
+		cb_Auteur.setBounds(170, 175, 203, 20);
+		cb_Editeur.setBounds(170, 206, 203, 20);
+		lbl_Editeur.setBounds(97, 205, 61, 19);
+		lbl_Auteur.setBounds(99, 176, 61, 19);
 		
 		//listeners
 		rdbtn_AjouterLivre.addActionListener(new ActionListener() {
@@ -241,7 +412,10 @@ public class GestionLivre {
 				table_livres.setEnabled(false);
 				table_livres.getSelectionModel().clearSelection();
 				selected = -1;
+				selected1 = -1;
+				selected2 = -1;
 				ViderChamps();
+				initTypes();
 			}
 		});
 		
@@ -255,7 +429,10 @@ public class GestionLivre {
 				table_livres.setEnabled(true);
 				table_livres.getSelectionModel().clearSelection();
 				selected = -1;
+				selected1 = -1;
+				selected2 = -1;
 				ViderChamps();
+				initTypes();
 			}
 		});
 		
@@ -269,7 +446,10 @@ public class GestionLivre {
 				table_livres.setEnabled(true);
 				table_livres.getSelectionModel().clearSelection();
 				selected = -1;
+				selected1 = -1;
+				selected2 = -1;
 				ViderChamps();
+				initTypes();
 			}
 		});
 		
@@ -303,11 +483,65 @@ public class GestionLivre {
 					}
 					if(editeurs.size()!=0)
 						cb_Editeur.setSelectedIndex(find);
+					showTypes(l.getID_livre());
 				}
 				
 			}
 			
 		});
+		
+		ListSelectionModel mod1 = table_noType.getSelectionModel();
+		mod1.addListSelectionListener(new ListSelectionListener(){
+
+			@Override
+			public void valueChanged(ListSelectionEvent arg0) {
+				selected1=table_noType.getSelectedRow();
+			}
+		});
+		
+		ListSelectionModel mod2 = table_type.getSelectionModel();
+		mod2.addListSelectionListener(new ListSelectionListener(){
+
+			@Override
+			public void valueChanged(ListSelectionEvent arg0) {
+				selected2=table_type.getSelectedRow();
+			}
+		});
+		
+		btn_addType.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0){
+				if(selected1>=0){
+					TypeLivre t = notTypes.get(selected1);
+					notTypes.remove(selected1);
+					table_modelNoType.removeRow(selected1);
+					types.add(t);
+					String[] row = new String[1];
+					row[0]=t.getNom();
+					table_modelType.addRow(row);
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Veuillez selectionner un type à ajouter", "Warning", JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
+		
+		btn_removeType.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0){
+				if(selected2>=0){
+					TypeLivre t = types.get(selected2);
+					types.remove(selected2);
+					table_modelType.removeRow(selected2);
+					notTypes.add(t);
+					String[] row = new String[1];
+					row[0]=t.getNom();
+					table_modelNoType.addRow(row);
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Veuillez selectionner un type à enlever", "Warning", JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
+		
 		
 		btn_Appliquer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -327,6 +561,7 @@ public class GestionLivre {
 						Livre l = new Livre(txt_nomLivre.getText(),dateApparition.getDate(),Double.parseDouble(txt_Prix.getText()));
 						l.setAuteur(auteurs.get(cb_Auteur.getSelectedIndex()));
 						l.setEditeur(editeurs.get(cb_Editeur.getSelectedIndex()));
+						l.setTypes(new HashSet<TypeLivre>(types));
 						stub.addLivre(l);
 						PreExecution();
 						ViderChamps();
@@ -353,6 +588,7 @@ public class GestionLivre {
 							l.setPrix(Double.parseDouble(txt_Prix.getText()));
 							l.setAuteur(auteurs.get(cb_Auteur.getSelectedIndex()));
 							l.setEditeur(editeurs.get(cb_Editeur.getSelectedIndex()));
+							l.setTypes(new HashSet<TypeLivre>(types));
 							stub.updateLivre(l);
 							PreExecution();
 							ViderChamps();
@@ -396,6 +632,12 @@ public class GestionLivre {
 		frame.getContentPane().add(cb_Auteur);
 		frame.getContentPane().add(lbl_Editeur);
 		frame.getContentPane().add(lbl_Auteur);
+		frame.getContentPane().add(lbl_Type);
+		frame.getContentPane().add(btn_removeType);
+		frame.getContentPane().add(btn_addType);
+		frame.getContentPane().add(lbl_notType);
+		frame.getContentPane().add(scrollPaneNoType);
+		frame.getContentPane().add(scrollPaneType);
 		
 	}
 }

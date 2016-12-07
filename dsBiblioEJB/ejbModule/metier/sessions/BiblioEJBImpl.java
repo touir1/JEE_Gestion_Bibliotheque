@@ -2,6 +2,7 @@ package metier.sessions;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -172,9 +173,18 @@ public class BiblioEJBImpl implements IBiblioRemote,IBiblioLocal{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Livre> consulterLivresEnPromotion() {
-		Query q=E.createQuery("select LP.livre from LigneLivrePromotion LP"
-							  +" where CURDATE() between LP.promotion.dateDebut and LP.promotion.dateFin");
-		return q.getResultList();
+		Query q=E.createQuery("select P from Promotion P"
+							  +" where CURDATE() between P.dateDebut and P.dateFin");
+		List<Promotion> lp=q.getResultList();
+		HashMap<Long,Livre> a = new HashMap<Long,Livre>();
+		for(int k=0;k<lp.size();k++){
+			ArrayList<Livre> all = new ArrayList<Livre>(lp.get(k).getLivres());
+			for(int i=0;i<all.size();i++){
+				a.put(all.get(i).getID_livre(),all.get(i));
+			}
+		}
+		List<Livre> retour = new ArrayList<Livre>(a.values());
+		return retour;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -422,6 +432,41 @@ return q.getResultList();
 		Query q=E.createQuery("select P.livres from Promotion P where "
 				+"P.ID_promotion = "+promo.getID_promotion());
 		return q.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TypeLivre> consulterTypeByLivre(Livre l) {
+		Query q=E.createQuery("select L.types from Livre L where "
+				+"L.ID_livre = "+l.getID_livre());
+		return q.getResultList();
+	}
+
+	@Override
+	public Compte identification(String user, String password) {
+		//System.out.println(user + ":"+password);
+		Query q = E.createQuery("select C from Compte C where C.login = :login and C.password = :password");
+		q.setParameter("login", user);
+		q.setParameter("password", password);
+		Compte c=null;
+		try{
+			c = (Compte) q.getSingleResult();
+		}
+		catch(Exception e){
+			//nothing
+		}
+		return c;
+	}
+
+	@Override
+	public Client consulterClient(Client client) {
+		Query q = E.createQuery("select C from Client C where C.nom = :nom and C.prenom = :prenom and C.email = :email and C.tel = :tel");
+		q.setParameter("nom", client.getNom());
+		q.setParameter("prenom", client.getPrenom());
+		q.setParameter("email", client.getEmail());
+		q.setParameter("tel",client.getTel());
+		Client c = (Client) q.getSingleResult();
+		return c;
 	}
 	
 	/*@Override

@@ -52,9 +52,9 @@ public class GestionPromotion {
 	private DefaultTableModel table_modelNoLivre;
 	private JScrollPane scrollPanePromo;
 	private JScrollPane scrollPaneLivre;
+	private JScrollPane scrollPaneNoLivre;
 	private JLabel lbl_EnPromotion;
 	private JLabel lbl_PasEnPromotion;
-	private JScrollPane scrollPaneNoLivre;
 	private JButton removeLivre;
 	private JButton addLivre;
 	
@@ -363,10 +363,7 @@ public class GestionPromotion {
 		lbl_titreFenetre.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 22));
 		lbl_DateDebut.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		table_promotions.setRowSelectionAllowed(false);
-		//table_livres.setRowSelectionAllowed(false);
-		//table_noLivres.setRowSelectionAllowed(false);
 		table_promotions.setEnabled(false);
-		//table_livres.setEnabled(false);
 		lbl_Pourcentage.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		scrollPanePromo.setSize(606, 188);
 		scrollPanePromo.setLocation(10, 253);
@@ -393,8 +390,8 @@ public class GestionPromotion {
 		scrollPaneLivre.setBounds(395, 86, 195, 144);
 		dateFin.setBounds(146, 115, 203, 20);
 		lbl_DateFin.setBounds(68, 115, 68, 19);
-		lbl_EnPromotion.setBounds(446, 56, 96, 19);
 		scrollPaneNoLivre.setBounds(675, 85, 195, 144);
+		lbl_EnPromotion.setBounds(446, 56, 96, 19);
 		lbl_PasEnPromotion.setBounds(713, 55, 120, 19);
 		removeLivre.setBounds(600, 165, 59, 23);
 		addLivre.setBounds(600, 131, 59, 23);
@@ -567,6 +564,7 @@ public class GestionPromotion {
 							l.setDateDebut(dateDebut.getDate());
 							l.setDateFin(dateFin.getDate());
 							l.setPourcentage(Integer.parseInt(txt_Pourcentage.getText()));
+							l.setLivres(new HashSet<Livre>(livres));
 							stub.modifierPromotion(l);
 							PreExecution();
 							ViderChamps();

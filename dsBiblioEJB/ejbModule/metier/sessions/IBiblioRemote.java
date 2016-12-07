@@ -37,11 +37,13 @@ public interface IBiblioRemote {
 	public List<TypeLivre> consulterTypeLivres();
 	public List<TypeLivre> consulterTypeLivresByNom(String nom);
 	public TypeLivre consulterTypeLivre(Long id);
+	public List<TypeLivre> consulterTypeByLivre(Livre l);
 	public void updateTypeLivre(TypeLivre type);
 	public void supprimerTypeLivre(Long id);
 	
 	public void ajouterClient(Client client);
 	public Client consulterClient(Long id);
+	public Client consulterClient(Client client);
 	public List<Compte> consulterClients();
 	public void updateClient(Client client);
 	public void supprimerClient(Long id);
@@ -51,6 +53,7 @@ public interface IBiblioRemote {
 	public List<Compte> consulterComptes();
 	public Compte consulterCompte(Long id);
 	public void modifierCompte(Compte compte);
+	public Compte identification(String user,String password);
 	
 	public void ajouterEditeur(Editeur editeur);
 	public void supprimerEditeur(Long id);
