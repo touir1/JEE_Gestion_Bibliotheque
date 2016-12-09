@@ -6,10 +6,12 @@ import javax.ejb.Remote;
 
 import metier.entities.Auteur;
 import metier.entities.Client;
+import metier.entities.Commande;
 import metier.entities.Compte;
 import metier.entities.Editeur;
 import metier.entities.Livre;
 import metier.entities.ModePaiement;
+import metier.entities.Panier;
 import metier.entities.Promotion;
 import metier.entities.TypeLivre;
 import metier.entities.Vote;
@@ -82,5 +84,17 @@ public interface IBiblioRemote {
 	public List<Promotion> consulterPromotions();
 	public void supprimerPromotion(Long id);
 	public List<Promotion> consulterPromotionEnCours();
+	
+	public Commande enregistrerCommande(Panier p, Client c, ModePaiement mode);
+	public Commande consulterCommande(Long id);
+	public List<Commande> consulterCommandes();
+	public List<Commande> consulterCommandesByClient(Client c);
+	public List<Commande> consulterCommandesByModePaiement(ModePaiement mp);
+	
+	public Client connexionClient(Compte compte);
+	
+	public boolean authentification(Compte compte);
+	
+	
 	
 }

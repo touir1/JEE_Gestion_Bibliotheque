@@ -1,7 +1,9 @@
 package metier.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -42,7 +44,7 @@ public class Livre implements Serializable {
 	private Auteur auteur;
 
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy="livres")
 	private Set<TypeLivre> types;
 	
 	@JsonIgnore
@@ -157,6 +159,5 @@ public class Livre implements Serializable {
 	public Livre() {
 		super();
 	}
-	
 	
 }

@@ -2,6 +2,8 @@ package clientWeb_JSF;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -12,7 +14,12 @@ import javax.faces.bean.SessionScoped;
 
 import metier.entities.Client;
 import metier.entities.Compte;
+import metier.entities.LigneCommande;
 import metier.entities.Livre;
+import metier.entities.ModePaiement;
+import metier.entities.Panier;
+import metier.entities.Promotion;
+import metier.entities.TypeLivre;
 import metier.sessions.IBiblioRemote;
 
 @ManagedBean
@@ -39,11 +46,175 @@ public class MB implements Serializable{
 	private String _password2;
 	private Client client;
 	private Compte compte;
+	private Panier panier;
+	private List<Livre> allLivres;
+	private Livre toAdd;
+	private Long idToAdd;
+	private int quantite;
+	private Long idToRemove;
+	private Long idToChange;
+	private List<ModePaiement> modePaiement;
+	private Long idModePaiement;
+	private HashMap<Long,Double> prixUnit;
+	private List<LigneCommande> artPanier;
+	private String selectedItem;
+	private String hidden;
+	private int qt;
 	
 	private String connectionError;
 	private String inscriptionError;
 	private String reussite;
 	private String log;
+	
+	public class LivrePlus{
+		private Livre livre;
+		private double prix;
+		private double originalPrix;
+		private String promo;
+		private int quantite = 1;
+		
+		public void setQuantite(int q){
+			this.quantite = q;
+		}
+		
+		public int getQuantite(){
+			return this.quantite;
+		}
+		
+		public void setOriginalPrix(double l){
+			this.originalPrix = l;
+		}
+		
+		public double getOriginalPrix(){
+			return this.originalPrix;
+		}
+		
+		public String getPromo(){
+			return this.promo;
+		}
+		
+		public void setPromo(String p){
+			this.promo=p;
+		}
+		
+		public Livre getLivre(){
+			return this.livre;
+		}
+		
+		public void setLivre(Livre l){
+			this.livre = l;
+		}
+		
+		public double getPrix(){
+			return this.prix;
+		}
+		
+		public void setPrix(double p){
+			this.prix = p;
+		}
+	}
+	
+	private List<LivrePlus> livres;
+	
+	public String getHidden(){
+		return this.hidden;
+	}
+	
+	public int getQt(){
+		return this.qt;
+	}
+	
+	public void setQt(int t){
+		this.qt = t;
+	}
+	
+	public void setHidden(String s){
+		this.hidden = s;
+	}
+	
+	public String getSelectedItem() {
+		return selectedItem;
+	}
+
+	public void setSelectedItem(String selectedItem) {
+		this.selectedItem = selectedItem;
+	}
+
+	public List<LigneCommande> getArtPanier(){
+		return this.artPanier;
+	}
+	
+	public void setArtPanier(List<LigneCommande> l){
+		this.artPanier = l;
+	}
+	
+	public HashMap<Long,Double> getPrixUnit(){
+		return this.prixUnit;
+	}
+	
+	public void setPrixUnit(HashMap<Long,Double> l){
+		this.prixUnit = l;
+	}
+	
+	public List<LivrePlus> getLivres(){
+		return this.livres;
+	}
+	
+	public void setLivres(List<LivrePlus> l){
+		this.livres = l;
+	}
+	
+	public List<Livre> getAllLivres(){
+		return this.allLivres;
+	}
+	
+	public List<ModePaiement> getModePaiement(){
+		return this.modePaiement;
+	}
+	
+	public Long getIdModePaiement(){
+		return this.idModePaiement;
+	}
+	
+	public void setIdModePaiement(Long id){
+		this.idModePaiement = id;
+	}
+	
+	public void setIdToChange(Long id){
+		this.idToChange = id;
+	}
+	
+	public Long getIdToRemove(){
+		return this.idToRemove;
+	}
+	
+	public Long getIdToChange(){
+		return this.idToChange;
+	}
+	
+	public void setIdToRemove(Long id){
+		this.idToRemove = id;
+	}
+	
+	public int getQuantite(){
+		return this.quantite;
+	}
+	
+	public void setQuantite(int q){
+		this.quantite = q;
+	}
+	
+	public void setIdToAdd(Long id){
+		this.idToAdd = id;
+	}
+	
+	public Long getIdToAdd(){
+		return this.idToAdd;
+	}
+	
+	public Livre getToAdd(){
+		return this.toAdd;
+	}
 	
 	public String getLog(){
 		return this.log;
@@ -93,8 +264,6 @@ public class MB implements Serializable{
 		return this.connectionError;
 	}
 	
-	
-	
 	public String getNom() {
 		return nom;
 	}
@@ -141,6 +310,10 @@ public class MB implements Serializable{
 
 	public void set_login(String _login) {
 		this._login = _login;
+	}
+	
+	public Panier getPanier(){
+		return this.panier;
 	}
 
 	public String get_password() {
@@ -198,6 +371,11 @@ public class MB implements Serializable{
 				return "Accueil.xhtml?faces-redirect=true";
 			}
 			else{
+				Panier p = panier;
+				Client c = compte.getClient();
+				init();
+				client = c;
+				panier = p;
 				return "Principal.xhtml?faces-redirect=true";
 			}
 		}
@@ -311,6 +489,10 @@ public class MB implements Serializable{
 	
 	@PostConstruct
 	public void init(){
+		panier = new Panier();
+		qt=1;
+		selectedItem = "0";
+		prixUnit = new HashMap<Long,Double>();
 		log="";
 		login ="";
 		password = "";
@@ -318,12 +500,13 @@ public class MB implements Serializable{
 		inscriptionError = "";
 		reussite="";
 		client = new Client();
-		List<Livre> temp = metier.consulterLivres();
+		modePaiement = metier.consulterModePaiements();
+		allLivres = metier.consulterLivres();
 		ArrayList<Livre> l= new ArrayList<Livre>();
-		if(temp.size()>0)
-			first = temp.get(0);
-		for(int i=1;i<temp.size();i++){
-			l.add(temp.get(i));
+		if(allLivres.size()>0)
+			first = allLivres.get(0);
+		for(int i=1;i<allLivres.size();i++){
+			l.add(allLivres.get(i));
 		}
 		promoLivres = l;
 		nb_promoLivres=promoLivres.size()+1;
@@ -331,5 +514,90 @@ public class MB implements Serializable{
 			nb = new int[nb_promoLivres-1];
 		else
 			nb=new int[1];
+		//livres=new ArrayList<LivrePlus>();
+		HashMap<Long,LivrePlus> lplus = new HashMap<Long,LivrePlus>();
+		ArrayList<Promotion> pr=new ArrayList<Promotion>(metier.consulterPromotionEnCours());
+		for(int i=0;i<pr.size();i++){
+			Promotion p = pr.get(i);
+			ArrayList<Livre> tmp = new ArrayList<Livre>(metier.consulterLivresByPromotion(p));
+			for(int j=0;j<tmp.size();j++){
+				Livre liv=tmp.get(j);
+				if(lplus.get(liv.getID_livre())==null){
+					LivrePlus livPlus = new LivrePlus();
+					livPlus.setLivre(liv);
+					livPlus.setOriginalPrix(liv.getPrix());
+					livPlus.setPromo("En promo");
+					livPlus.setPrix(liv.getPrix()-((liv.getPrix()*p.getPourcentage())/100));
+					prixUnit.put(liv.getID_livre(), liv.getPrix()-((liv.getPrix()*p.getPourcentage())/100));
+					lplus.put(liv.getID_livre(), livPlus);
+				}
+				else{
+					LivrePlus livPlus = lplus.get(liv.getID_livre());
+					livPlus.setPrix(livPlus.getPrix()-((livPlus.getPrix()*p.getPourcentage())/100));
+					prixUnit.put(liv.getID_livre(), livPlus.getPrix()-((livPlus.getPrix()*p.getPourcentage())/100));
+				}
+			}
+		}
+		for(int i=0;i<allLivres.size();i++){
+			Livre liv = allLivres.get(i);
+			if(lplus.get(liv.getID_livre())==null){
+				LivrePlus livPlus = new LivrePlus();
+				livPlus.setLivre(liv);
+				livPlus.setOriginalPrix(liv.getPrix());
+				livPlus.setPromo("");
+				//livPlus.setPrix(liv.getPrix());
+				lplus.put(liv.getID_livre(), livPlus);
+				prixUnit.put(liv.getID_livre(), liv.getPrix());
+			}
+		}
+		livres = new ArrayList<LivrePlus>(lplus.values());
+	}
+	
+	public void addLivre(int idx){
+		LivrePlus lp = livres.get(idx);
+		toAdd = lp.livre;
+		panier.addArticle(toAdd, lp.getQuantite(),client);
+	}
+	
+	public List<TypeLivre> typeLivres(Livre l){
+		List<TypeLivre> retour= metier.consulterTypeByLivre(l);
+		return retour;
+	}
+	
+	public void removeLivre(int idx){
+		Long id=artPanier.get(idx).getLivre().getID_livre();
+		panier.deleteItem(id);
+	}
+	
+	public int TaillePanier(){
+		return panier.getSize();
+	}
+	
+	public void changeQuantite(){
+		panier.changeArticle(idToChange, quantite);
+	}
+	
+	public List<LigneCommande> articlesPanier(){
+		List<LigneCommande> lc = new ArrayList<LigneCommande>(panier.getItems());
+		List<LigneCommande> retour = new ArrayList<LigneCommande>();
+		for(int i=0;i<lc.size();i++){
+			Client c = lc.get(i).getCommande().getClient();
+			if(c.getNum_client() == client.getNum_client()){
+				LigneCommande lig = lc.get(i);
+				lig.setPrix(prixUnit.get(lc.get(i).getLivre().getID_livre()));
+				lc.set(i, lig);
+				retour.add(lig);
+			}
+		}
+		artPanier = retour;
+		return retour;
+	}
+	
+	public void passerCommande(){
+		metier.enregistrerCommande(panier, client, modePaiement.get(Integer.parseInt(selectedItem)));
+		for(int i=0;i<artPanier.size();i++){
+			Livre l=artPanier.get(i).getLivre();
+			panier.deleteItem(l.getID_livre());
+		}
 	}
 }

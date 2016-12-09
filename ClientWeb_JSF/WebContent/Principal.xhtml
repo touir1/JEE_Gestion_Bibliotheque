@@ -8,15 +8,169 @@
 	xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 <h:head>
 	<link rel="stylesheet" href="resources/css/bootstrap.min.css"></link>
-	<link rel="stylesheet" href="resources/css/toAll.css"></link>
 	<link rel="stylesheet" href="resources/css/Principal.css"></link>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<title>Principal</title>
+	<link rel="stylesheet" href="resources/css/simple-sidebar.css"></link>
+	<link rel="stylesheet" href="resources/css/toAll.css"></link>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Principal</title>
 </h:head>
-<h:body>
-	<h2>test</h2>
+<h:body class="body">
+	<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand">Bibliotheque</a>
+		</div>
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="Principal.xhtml">Home</a></li>
+			<li><a data-toggle="modal" data-target="#APropos" href="">A
+					propos</a></li>
+			<li><a data-toggle="modal" data-target="#Panier" href="">Panier</a></li>
+			<li class="active"><h:link value="Se Deconnecter"
+					outcome="Accueil" /></li>
+		</ul>
+	</div>
+	</nav>
+	<!-- Main -->
+	<table class="table table-hover table-striped">
+		<thead>
+			<tr>
+				<th>Cover</th>
+				<th>Informations</th>
+				<th>Buy</th>
+			</tr>
+		</thead>
+		<tbody>
+			<ui:repeat var="l" value="#{MB.livres}" varStatus="vs">
+				<tr>
+					<td><img src="./resources/img/book.jpg" width="150"
+						height="200"></img><br></br> <strong>Title:
+							#{l.livre.nomLivre}</strong></td>
+					<td><font color="green"> <h:outputText
+							value="En Promotion" rendered="#{l.promo !=''}"
+							style="font-weight:bold" /></font><br></br> <u>Date d'apparition:</u>
+						#{l.livre.dateApparition}<br></br> <u>Auteur:</u>
+						#{l.livre.auteur.nom} #{l.livre.auteur.prenom}<br></br> <u>Editeur:</u>
+						#{l.livre.editeur.nom}<br></br> <u>Prix:</u> #{l.originalPrix} TND<br></br>
+						<u> <h:outputText value="Après promo:"
+							rendered="#{l.promo !=''}" style="font-weight:bold" /></u> <font
+						color="green"> <h:outputText value=" #{l.prix} TND"
+							rendered="#{l.promo !=''}" style="font-weight:bold" /></font>
+							<br></br>
+							Types:
+							<ui:repeat var="x" value="#{MB.typeLivres(l.livre)}" varStatus="v">
+								#{v.index}, 
+							</ui:repeat>
+							</td>
+					<td><h:form id="submit-form" role="form" method="post"
+							style="display: block;">
+							<h:inputText id="quantite" name="quantite" value="#{l.quantite}"
+								style="display: none;" size="10" tabindex="0" required="true"
+								label="Quantite"
+								onkeypress="if(event.which &lt; 48 || event.which &gt; 57 ) if(event.which != 8) if(e.keyCode != 9) return false;">
+								<f:validateLongRange maximum="10" minimum="1" />
+							</h:inputText>
+							<h:commandButton id="hdnBtn"
+								actionListener="#{MB.addLivre(vs.index)}" style="display: none;" />
+
+							<a id="submit" name="login-submit" tabindex="1"
+								class="btn btn-default"
+								onclick="validate(this.parentElement,#{vs.index})">Ajouter
+								au panier</a>
+						</h:form></td>
+				</tr>
+			</ui:repeat>
+		</tbody>
+	</table>
+
+	<!-- End Main -->
+	<div id="APropos" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">A propos</h4>
+				</div>
+				<div class="modal-body">
+					<p>Le site à été développer par Touir Mohamed Ali</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<div id="Panier" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Panier</h4>
+				</div>
+				<div class="modal-body">
+					Taille du panier: #{MB.TaillePanier()}
+					<table class="table table-hover table-striped">
+						<thead>
+							<tr>
+								<th>Nom article</th>
+								<th>Prix unitaire</th>
+								<th>Quantité</th>
+								<th>Total Prix</th>
+								<th>Enlever</th>
+							</tr>
+						</thead>
+						<tbody>
+							<ui:repeat var="l" value="#{MB.articlesPanier()}" varStatus="vs">
+								<tr>
+									<td>#{l.livre.nomLivre}</td>
+									<td>#{l.prix}</td>
+									<td>#{l.quantite}</td>
+									<td>#{l.prix * l.quantite}</td>
+									<td><h:form id="removeFrm" role="form" method="post"
+											style="display: block;">
+											<h:commandButton id="enlever-panier"
+												actionListener="#{MB.removeLivre(vs.index)}"
+												style="display: none"></h:commandButton>
+											<a type="submit" class="btn btn-default" id="rm" name="rm"
+												onclick="removePanier(this.parentElement,#{vs.index})">
+												<span class="glyphicon glyphicon-remove"></span>Enlever
+											</a>
+										</h:form></td>
+								</tr>
+							</ui:repeat>
+						</tbody>
+					</table>
+					<div class="contrainer-fluid">
+						<div class="col-sm-3">Mode de paiement:</div>
+						<div class="col-sm-9">
+							<h:selectOneMenu value="#{MB.selectedItem}" class="form-control"
+								id="selectPay">
+								<f:selectItems value="#{MB.modePaiement}" var="vs"
+									itemValue="#{vs.id}" itemLabel="#{vs.name}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<br></br> <br></br>
+				</div>
+				<div class="modal-footer">
+					<h:form>
+						<h:commandButton id="enlever-panier"
+							actionListener="#{MB.passerCommande()}" style="display: none"></h:commandButton>
+						<a class="btn btn-default" data-dismiss="modal"
+							onclick="passerCommande(this.parentElement)">Passer Commande</a>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<h:inputHidden value="#{MB.selectedItem}" id="hidden" />
+					</h:form>
+
+				</div>
+			</div>
+
+		</div>
+	</div>
 </h:body>
-	<script src="resources/js/jquery-3.1.1.min.js"></script>
-	<script src="resources/js/bootstrap.min.js"></script>
-	<script src="resources/js/Principal.js"></script>
+<script src="resources/js/jquery-3.1.1.min.js"></script>
+<script src="resources/js/bootstrap.min.js"></script>
+<script src="resources/js/Principal.js"></script>
 </html>

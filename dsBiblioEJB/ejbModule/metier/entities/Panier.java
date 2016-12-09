@@ -1,6 +1,7 @@
 package metier.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -12,8 +13,8 @@ public class Panier implements Serializable{
 	private Map<Long,LigneCommande>
 	items = new HashMap<Long, LigneCommande>();
 
-	public Set<LigneCommande> getItems() {
-		return (Set<LigneCommande>) items.values();
+	public Collection<LigneCommande> getItems() {
+		return items.values();
 	}
 
 	public void setItems(Map<Long, LigneCommande> items) {
@@ -29,9 +30,11 @@ public class Panier implements Serializable{
 		this.items = items;
 	}
 	
-	public void addArticle(Livre l,int quantite){
+	public void addArticle(Livre l,int quantite,Client c){
 		if(items.get(l.getID_livre())==null){
 			LigneCommande lc = new LigneCommande();
+			lc.setCommande(new Commande());
+			lc.getCommande().setClient(c);
 			lc.setLivre(l);
 			lc.setPrix(l.getPrix());
 			lc.setQuantite(quantite);
@@ -42,6 +45,15 @@ public class Panier implements Serializable{
 			lc.setQuantite(lc.getQuantite()+quantite);
 			items.put(l.getID_livre(), lc);
 		}
+	}
+	
+	public void changeArticle(Long id,int quantite){
+		LigneCommande lc = new LigneCommande();
+		Livre l = items.get(id).getLivre();
+		lc.setLivre(l);
+		lc.setPrix(l.getPrix());
+		lc.setQuantite(quantite);
+		items.put(id, lc);
 	}
 	
 	public int getSize(){

@@ -3,7 +3,9 @@ package metier.sessions;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.persistence.*;
@@ -13,6 +15,8 @@ import metier.entities.Client;
 import metier.entities.Commande;
 import metier.entities.Compte;
 import metier.entities.Editeur;
+import metier.entities.LigneCommande;
+import metier.entities.LigneCommandePK;
 import metier.entities.Livre;
 import metier.entities.ModePaiement;
 import metier.entities.Panier;
@@ -27,13 +31,40 @@ public class BiblioEJBImpl implements IBiblioRemote,IBiblioLocal{
 	
 	@Override
 	public Commande enregistrerCommande(Panier p, Client c, ModePaiement mode) {
-		E.persist(c);
+		//E.persist(c);
+		Client client = consulterClient(c);
 		Commande cm = new Commande();
-		cm.setClient(c);
-		cm.setLigneCommandes(p.getItems());
+		cm.setClient(client);
+		
+		List<LigneCommande> lc = new ArrayList<LigneCommande>(p.getItems());
+		List<LigneCommande> retour = new ArrayList<LigneCommande>();
+		
+		for(int i=0;i<lc.size();i++){
+			Client cl = lc.get(i).getCommande().getClient();
+			if(cl.getNum_client() == client.getNum_client()){
+				LigneCommande lig = lc.get(i);
+				retour.add(lig);
+			}
+		}
+		
+		HashSet<LigneCommande> hs = new HashSet<LigneCommande>(retour);
+		
+		cm.setLigneCommandes(hs);
 		cm.setDateCommande(new Date());
 		cm.setModePaiement(mode);
 		E.persist(cm);
+		
+		for(int i=0;i<retour.size();i++){
+			LigneCommande lcm = retour.get(i);
+			lcm.setCommande(cm);
+			lcm.setLivre(E.find(Livre.class, lcm.getLivre().getID_livre()));
+			LigneCommandePK pk = new LigneCommandePK();
+			pk.setID_livre(lcm.getLivre().getID_livre());
+			pk.setNum_commande(cm.getNum_commande());
+			lcm.setLigneCommandePk(pk);
+			E.persist(lcm);
+		}
+		
 		return cm;
 	}
 
