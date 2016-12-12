@@ -351,7 +351,7 @@ public class GestionLivre {
 		frame.setTitle("Gestion Livre");
 		frame.setSize(900, 500);
 		frame.setResizable(false);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.setLocale(java.util.Locale.getDefault());
 		frame.getContentPane().setLayout(null);
