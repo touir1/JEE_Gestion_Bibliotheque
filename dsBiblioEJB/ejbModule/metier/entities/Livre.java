@@ -44,7 +44,7 @@ public class Livre implements Serializable {
 	private Auteur auteur;
 
 	@JsonIgnore
-	@ManyToMany(mappedBy="livres")
+	@ManyToMany(fetch=FetchType.LAZY)
 	private Set<TypeLivre> types;
 	
 	@JsonIgnore
@@ -159,5 +159,4 @@ public class Livre implements Serializable {
 	public Livre() {
 		super();
 	}
-	
 }

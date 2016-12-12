@@ -2,6 +2,7 @@ package clientWeb_JSF;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +14,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import metier.entities.Client;
+import metier.entities.Commande;
 import metier.entities.Compte;
 import metier.entities.LigneCommande;
 import metier.entities.Livre;
@@ -112,6 +114,54 @@ public class MB implements Serializable{
 		public void setPrix(double p){
 			this.prix = p;
 		}
+	}
+	
+	public class Historique{
+		private String dateCommande;
+		private String modePaiement;
+		private int quantite;
+		private double prixUnitaire;
+		private String nomLivre;
+		private Long idLivre;
+		
+		public String getDateCommande() {
+			return dateCommande;
+		}
+		public void setDateCommande(String dateCommande) {
+			this.dateCommande = dateCommande;
+		}
+		public String getModePaiement() {
+			return modePaiement;
+		}
+		public void setModePaiement(String modePaiement) {
+			this.modePaiement = modePaiement;
+		}
+		public int getQuantite() {
+			return quantite;
+		}
+		public void setQuantite(int quantite) {
+			this.quantite = quantite;
+		}
+		public double getPrixUnitaire() {
+			return prixUnitaire;
+		}
+		public void setPrixUnitaire(double prixUnitaire) {
+			this.prixUnitaire = prixUnitaire;
+		}
+		public String getNomLivre() {
+			return nomLivre;
+		}
+		public void setNomLivre(String nomLivre) {
+			this.nomLivre = nomLivre;
+		}
+		public Long getIdLivre() {
+			return idLivre;
+		}
+		public void setIdLivre(Long idLivre) {
+			this.idLivre = idLivre;
+		}
+		
+		
 	}
 	
 	private List<LivrePlus> livres;
@@ -556,10 +606,11 @@ public class MB implements Serializable{
 	public void addLivre(int idx){
 		LivrePlus lp = livres.get(idx);
 		toAdd = lp.livre;
-		panier.addArticle(toAdd, lp.getQuantite(),client);
+		panier.addArticle(toAdd, 1,client);
 	}
 	
-	public List<TypeLivre> typeLivres(Livre l){
+	public List<TypeLivre> typeLivres(int idx){
+		Livre l = livres.get(idx).getLivre();
 		List<TypeLivre> retour= metier.consulterTypeByLivre(l);
 		return retour;
 	}
@@ -599,5 +650,26 @@ public class MB implements Serializable{
 			Livre l=artPanier.get(i).getLivre();
 			panier.deleteItem(l.getID_livre());
 		}
+	}
+	
+	public List<Historique> historiqueCommandes(){
+		List<Commande> cmd = metier.consulterCommandesByClient(client);
+		List<Historique> retour = new ArrayList<Historique>();
+		for(int i=0;i<cmd.size();i++){
+			Commande c = cmd.get(i);
+			List<LigneCommande> lc = new ArrayList<LigneCommande>(metier.consulterLigneCommande(c));
+			for(int j=0;j<lc.size();j++){
+				Historique h = new Historique();
+				LigneCommande ligne = lc.get(j);
+				h.setDateCommande(c.getDateCommande().toString());
+				h.setIdLivre(ligne.getLivre().getID_livre());
+				h.setModePaiement(c.getModePaiement().getName());
+				h.setNomLivre(ligne.getLivre().getNomLivre());
+				h.setPrixUnitaire(ligne.getPrix());
+				h.setQuantite(ligne.getQuantite());
+				retour.add(h);
+			}
+		}
+		return retour;
 	}
 }

@@ -28,6 +28,7 @@ public class Client implements Serializable{
 	@OneToMany(mappedBy="client",cascade = CascadeType.REMOVE)
 	private Set<Vote> votes;
 	
+	@JsonIgnore
 	@OneToOne(mappedBy = "client",cascade = CascadeType.REMOVE)
 	private Compte compte;
 	

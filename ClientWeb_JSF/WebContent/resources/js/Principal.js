@@ -14,7 +14,7 @@ function passerCommande(form) {
 function validate(form, idx) {
 	//var val = form.elements[1].value;
 	//if (val > 0 && val < 10) {
-		form.elements[2].click();
+		form.elements[1].click();
 		alert("le livre a été ajouté au panier");
 	//}
 

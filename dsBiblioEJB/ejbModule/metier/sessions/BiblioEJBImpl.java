@@ -499,6 +499,13 @@ return q.getResultList();
 		Client c = (Client) q.getSingleResult();
 		return c;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<LigneCommande> consulterLigneCommande(Commande c) {
+		Query q = E.createQuery("select L from LigneCommande L where L.commande.num_commande = "+c.getNum_commande());
+		return q.getResultList();
+	}
 	
 	/*@Override
 	public List<Livre> test(){

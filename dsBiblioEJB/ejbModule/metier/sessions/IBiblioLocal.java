@@ -8,6 +8,7 @@ import metier.entities.Auteur;
 import metier.entities.Client;
 import metier.entities.Commande;
 import metier.entities.Compte;
+import metier.entities.LigneCommande;
 import metier.entities.Livre;
 import metier.entities.ModePaiement;
 import metier.entities.Panier;
@@ -56,6 +57,10 @@ public interface IBiblioLocal {
 	
 	public Promotion consulterPromotion(Long id);
 	public List<Promotion> consulterPromotions();
+	
+	public Compte identification(String user,String password);
+	
+	public List<LigneCommande> consulterLigneCommande(Commande c);
 	
 	//public List<Livre> test();
 }

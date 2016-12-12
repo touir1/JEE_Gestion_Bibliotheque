@@ -9,6 +9,7 @@ import metier.entities.Client;
 import metier.entities.Commande;
 import metier.entities.Compte;
 import metier.entities.Editeur;
+import metier.entities.LigneCommande;
 import metier.entities.Livre;
 import metier.entities.ModePaiement;
 import metier.entities.Panier;
@@ -95,6 +96,6 @@ public interface IBiblioRemote {
 	
 	public boolean authentification(Compte compte);
 	
-	
+	public List<LigneCommande> consulterLigneCommande(Commande c);
 	
 }

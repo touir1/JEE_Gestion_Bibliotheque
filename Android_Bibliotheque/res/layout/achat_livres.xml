@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:scrollbars="vertical" >
+
+    <ListView
+        android:id="@+id/listeLivres"
+        android:layout_width="match_parent"
+        android:layout_height="256dp"
+        android:layout_x="15dp"
+        android:layout_y="185dp" >
+    </ListView>
+
+    <EditText
+        android:id="@+id/SearchBar"
+        android:layout_width="151dp"
+        android:layout_height="wrap_content"
+        android:layout_x="10dp"
+        android:layout_y="75dp"
+        android:ems="10"
+        android:hint="search"
+        android:textColor="@android:color/holo_blue_light" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/btn_historique"
+        android:layout_width="191dp"
+        android:layout_height="wrap_content"
+        android:layout_x="148dp"
+        android:layout_y="13dp"
+        android:text="Historique d&apos;achat"
+        android:textColor="@android:color/holo_blue_light" />
+
+</AbsoluteLayout>
