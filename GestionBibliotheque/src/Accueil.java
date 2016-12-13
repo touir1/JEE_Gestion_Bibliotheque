@@ -3,16 +3,14 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
 import javax.swing.JButton;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Accueil extends JFrame {
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -7422136070563511862L;
 	private JPanel contentPane;
 
@@ -36,15 +34,18 @@ public class Accueil extends JFrame {
 	 * Create the frame.
 	 */
 	public Accueil() {
+		
+		ClientEJB.initialisation();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 264, 400);
+		setBounds(100, 100, 323, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JButton btnNewButton = new JButton("Gestion Livre");
-		btnNewButton.setBounds(47, 34, 159, 23);
+		btnNewButton.setBounds(47, 34, 211, 23);
 		btnNewButton.addActionListener(new ActionListener(){
 
 			@Override
@@ -57,7 +58,7 @@ public class Accueil extends JFrame {
 		contentPane.add(btnNewButton);
 		
 		JButton btnGestionAuteur = new JButton("Gestion Auteur");
-		btnGestionAuteur.setBounds(47, 77, 159, 23);
+		btnGestionAuteur.setBounds(47, 77, 211, 23);
 		btnGestionAuteur.addActionListener(new ActionListener(){
 
 			@Override
@@ -70,7 +71,7 @@ public class Accueil extends JFrame {
 		contentPane.add(btnGestionAuteur);
 		
 		JButton btnGestionEditeur = new JButton("Gestion Editeur");
-		btnGestionEditeur.setBounds(47, 122, 159, 23);
+		btnGestionEditeur.setBounds(47, 122, 211, 23);
 		btnGestionEditeur.addActionListener(new ActionListener(){
 
 			@Override
@@ -83,7 +84,7 @@ public class Accueil extends JFrame {
 		contentPane.add(btnGestionEditeur);
 		
 		JButton btnGestionModeDe = new JButton("Gestion Mode de paiement");
-		btnGestionModeDe.setBounds(47, 169, 159, 23);
+		btnGestionModeDe.setBounds(47, 169, 211, 23);
 		btnGestionModeDe.addActionListener(new ActionListener(){
 
 			@Override
@@ -96,7 +97,7 @@ public class Accueil extends JFrame {
 		contentPane.add(btnGestionModeDe);
 		
 		JButton btnGestionPromotion = new JButton("Gestion Promotion");
-		btnGestionPromotion.setBounds(47, 217, 159, 23);
+		btnGestionPromotion.setBounds(47, 217, 211, 23);
 		btnGestionPromotion.addActionListener(new ActionListener(){
 
 			@Override
@@ -109,7 +110,7 @@ public class Accueil extends JFrame {
 		contentPane.add(btnGestionPromotion);
 		
 		JButton btnGestionTypeLivre = new JButton("Gestion Type Livre");
-		btnGestionTypeLivre.setBounds(47, 268, 159, 23);
+		btnGestionTypeLivre.setBounds(47, 268, 211, 23);
 		btnGestionTypeLivre.addActionListener(new ActionListener(){
 
 			@Override
@@ -122,7 +123,7 @@ public class Accueil extends JFrame {
 		contentPane.add(btnGestionTypeLivre);
 		
 		JButton btnQuitter = new JButton("Quitter");
-		btnQuitter.setBounds(47, 315, 159, 23);
+		btnQuitter.setBounds(47, 315, 211, 23);
 		btnQuitter.addActionListener(new ActionListener(){
 
 			@Override

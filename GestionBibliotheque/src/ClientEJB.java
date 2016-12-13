@@ -12,7 +12,7 @@ public final class ClientEJB {
 	
 	private ClientEJB(){}
 	
-	private static void initialisation(){
+	public static void initialisation(){
 		//connection
 		if(stub==null){
 			try{

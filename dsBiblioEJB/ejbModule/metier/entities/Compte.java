@@ -3,8 +3,6 @@ package metier.entities;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name="COMPTE")
 public class Compte implements Serializable{
